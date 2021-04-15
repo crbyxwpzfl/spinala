@@ -8,6 +8,7 @@ totaltime = 10 - accbrakecompensation #fahrzeit von 0-100 von unten bis ganz obe
 
 singlesteptime = totaltime/100
 diff = 0
+value = 0
 
 def go():
     import RPi.GPIO as GPIO
@@ -26,6 +27,11 @@ def go():
             GPIO.output(runter,1)
             time.sleep(ontime)
             GPIO.cleanup()
+
+            f = open("/home/pi/Desktop/git/height.txt", 'w')
+            f.write(value) #schrieb höhe nur wenn gefahren wird
+            f.close
+
         
     if diff > 0:
         ontime = diff*singlesteptime + accbrakecompensation
@@ -33,6 +39,11 @@ def go():
             GPIO.output(hoch,1)
             time.sleep(ontime)
             GPIO.cleanup()
+
+            f = open("/home/pi/Desktop/git/height.txt", 'w')
+            f.write(value) #schrieb höhe nur wenn gefahren wird
+            f.close
+
 
     sys.exit() #if diff 0 oder kleiner 0 nichts tun
 
@@ -67,20 +78,12 @@ if sys.argv[1] == "Set":
         if value == "0":
             diff = 0 - int(status) #fahr tisch auf null   
             
-            f = open("/home/pi/Desktop/git/height.txt", 'w')
-            f.write(value) #schrieb höhe null in height.txt
-            f.close
-            
             go()
 
         sys.exit() #wenn value 1 also anschalten tu nichts
 
     if characteristic == "Brightness":
         diff = int(value) - int(status)
-
-        f = open("/home/pi/Desktop/git/height.txt", 'w')
-        f.write(value) #schrib neuen höhen wert
-        f.close
 
         go()
 
