@@ -23,12 +23,36 @@ if sys.argv[1] == "Get":
         sys.exit()
 
     if characteristic == "CurrentTemperature" or characteristic == "TargetTemperature" or characteristic == "CoolingThresholdTemperature":
+        
+        #read cpu temp
         from gpiozero import CPUTemperature
         cpu = CPUTemperature()
-        print(round(cpu.temperature))
+        cputemp = round(cpu.temperature)
         
-        #logic für auto start fan
+        #init gpio controll
+        import RPi.GPIO as GPIO
+        GPIO.setwarnings(False)
+        fan = 40
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(fan,GPIO.OUT)
 
+        #start fan
+        if cputemp > 50:
+            GPIO.output(fan,1)
+            f = open("/home/pi/Desktop/git/Status.txt", 'w')
+            f.write("2") #status cool
+            f.close
+
+    
+        #stop fan
+        if cputemp < 40:
+            GPIO.output(fan,0)
+            f = open("/home/pi/Desktop/git/Status.txt", 'w')
+            f.write("1") #status heat
+            f.close
+
+
+        print(cputemp)
         sys.exit() 
 
 if sys.argv[1] == "Set":
@@ -45,12 +69,21 @@ if sys.argv[1] == "Set":
 
         #off
         if value == "0" or value == "3":
-                #not handled on purpose
-                sys.exit()
+            #not handled on purpose
+            sys.exit()
+
         #heat
-        if value == "1" or value == "2":
-                GPIO.output(fan,0)
-                f = open("/home/pi/Desktop/git/Status.txt", 'w')
-                f.write(value)
-                f.close
-                sys.exit()
+        if value == "1":
+            GPIO.output(fan,0)
+            f = open("/home/pi/Desktop/git/Status.txt", 'w')
+            f.write(value)
+            f.close
+            sys.exit()
+
+        #cool
+        if value == "2":
+            GPIO.output(fan,1)
+            f = open("/home/pi/Desktop/git/Status.txt", 'w')
+            f.write(value)
+            f.close
+            sys.exit()
