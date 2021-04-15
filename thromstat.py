@@ -25,31 +25,26 @@ if sys.argv[1] == "Get":
         from gpiozero import CPUTemperature
         cpu = CPUTemperature()
         print(round(cpu.temperature))
-        sys.exit() 
+        sys.exit()
 
     if characteristic == "TargetTemperature":
-        f = open("/home/pi/Desktop/TTemp.txt", 'r')
-        status = f.read()
-        f.close()
-        print(status)
-        sys.exit() 
+        from gpiozero import CPUTemperature
+        cpu = CPUTemperature()
+        print(round(cpu.temperature))
+        sys.exit()
 
     if characteristic == "TemperatureDisplayUnits":
         print("CELSIUS")
         sys.exit()
 
     if characteristic == "CoolingThresholdTemperature":
-        f = open("/home/pi/Desktop/CTTemp.txt", 'r')
-        status = f.read()
-        f.close()
-        print(status)
-        sys.exit() 
+        from gpiozero import CPUTemperature
+        cpu = CPUTemperature()
+        print(round(cpu.temperature))
+        sys.exit()
 
     if characteristic == "HeatingThresholdTemperature":
-        f = open("/home/pi/Desktop/HTTemp.txt", 'r')
-        status = f.read()
-        f.close()
-        print(status)
+        print("0")
         sys.exit() 
 
 
@@ -67,52 +62,33 @@ if sys.argv[1] == "Set":
 
         #off
         if value == "0":
-            GPIO.output(fan,0)
-
+                #not handled on purpose
+                sys.exit()
         #heat
         if value == "1":
-            GPIO.output(fan,0)
+                GPIO.output(fan,0)
+                f = open("/home/pi/Desktop/THCStatus.txt", 'w')
+                f.write(value)
+                f.close
+                
+                f = open("/home/pi/Desktop/CHCStatus.txt", 'w')
+                f.write(value)
+                f.close
+                sys.exit()
 
         #cool
         if value == "2":
-            GPIO.output(fan,1)
+                GPIO.output(fan,1)
+                f = open("/home/pi/Desktop/THCStatus.txt", 'w')
+                f.write(value)
+                f.close
+                
+                f = open("/home/pi/Desktop/CHCStatus.txt", 'w')
+                f.write(value)
+                f.close
+                sys.exit()
 
         #auto
         if value == "3":
-            GPIO.output(fan,0)
-
-        f = open("/home/pi/Desktop/THCStatus.txt", 'w')
-        f.write(value)
-        f.close
-
-        f = open("/home/pi/Desktop/CHCStatus.txt", 'w')
-        f.write(value)
-        f.close
-        sys.exit()
-
-    if characteristic == "TargetTemperature":
-        value = sys.argv[4].strip("''")
-        value = str(float(value))
-
-        f = open("/home/pi/Desktop/TTemp.txt", 'w')
-        f.write(value)
-        f.close
-        sys.exit()
-        
-    if characteristic == "CoolingThresholdTemperature":
-        value = sys.argv[4].strip("''")
-        value = str(float(value))
-
-        f = open("/home/pi/Desktop/CTTemp.txt", 'w')
-        f.write(value)
-        f.close
-        sys.exit()
-
-    if characteristic == "HeatingThresholdTemperature":
-       value = sys.argv[4].strip("''")
-       value = str(float(value))
-
-       f = open("/home/pi/Desktop/HTTemp.txt", 'w')
-       f.write(value)
-       f.close
-       sys.exit()
+                #not handled on purpose
+                sys.exit()
