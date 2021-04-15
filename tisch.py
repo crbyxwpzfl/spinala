@@ -1,3 +1,4 @@
+
 #PROBLEM tisch färht langsam an daraus folgt abweichung zu durchgehender fahrzeit0-100 
 import sys
 import time
@@ -36,7 +37,7 @@ if sys.argv[1] == "Set":
             f.write(value) #schrieb höhe null in height.txt
             f.close
 
-    sys.exit() #wenn value 1 also anschalten tu nichts
+        sys.exit() #wenn value 1 also anschalten tu nichts
 
 
     if characteristic == "Brightness":
