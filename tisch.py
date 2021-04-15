@@ -33,7 +33,9 @@ if sys.argv[1] == "Set":
     hoch = 14
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(runter,GPIO.OUT)
+    GPIO.output(runter,0)
     GPIO.setup(hoch,GPIO.OUT)
+    GPIO.output(hoch,0)
 
     totaltime = 4 #fahrzeit von 0-100 von unten bis ganz oben
 
