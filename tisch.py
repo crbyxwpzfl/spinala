@@ -1,9 +1,9 @@
-#neues problem wenn ontime kürzer als compensations time ist dies differenz zu viel fahrzeit
+#neues problem wenn ontime < compensation dann negative ontime
 import sys
 import time
 characteristic = sys.argv[3].strip("''")
 
-accbrakecompensation = 0
+accbrakecompensation = -0.5
 totaltime = 4 - accbrakecompensation #fahrzeit von 0-100 von unten bis ganz oben
 
 singlesteptime = totaltime/100
@@ -22,17 +22,19 @@ def go():
 
     if diff < 0:
         ontime = abs(diff)*singlesteptime + accbrakecompensation
-        GPIO.output(runter,1)
-        time.sleep(ontime)
-        GPIO.cleanup()
+        if ontime > 0:
+            GPIO.output(runter,1)
+            time.sleep(ontime)
+            GPIO.cleanup()
         
     if diff > 0:
         ontime = diff*singlesteptime + accbrakecompensation
-        GPIO.output(hoch,1)
-        time.sleep(ontime)
-        GPIO.cleanup()
+        if ontime > 0:
+            GPIO.output(hoch,1)
+            time.sleep(ontime)
+            GPIO.cleanup()
 
-    sys.exit() #if diff 0 oder kleiner als 10 nichts tun
+    sys.exit() #if diff 0 oder kleiner 0 nichts tun
 
 if sys.argv[1] == "Get":
     if characteristic == "On":
