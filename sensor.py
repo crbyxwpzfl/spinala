@@ -1,1 +1,1 @@
-print("sensor")
+print("50")
