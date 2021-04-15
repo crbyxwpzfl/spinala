@@ -1,4 +1,4 @@
-#PROBLEM tisch färht langsam an daraus folgt abweichung zu durchgehender fahrzeit0-100 
+#PROBLEM tisch färht in kleinen schritten weiter als in grossen liegt am anfahren 
 import sys
 import time
 characteristic = sys.argv[3].strip("''")
