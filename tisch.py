@@ -69,13 +69,15 @@ if sys.argv[1] == "Get":
 if sys.argv[1] == "Set":
     value = sys.argv[4].strip("''")
     value = str(value)
+    if value == "false":
+        value = 0
 
     f = open("/home/pi/Desktop/git/height.txt", 'r')
     status = f.read() #lies alten höhen wert
     f.close()
 
     if characteristic == "On":
-        if value == "0" or value == "false":
+        if value == "0":
             diff = 0 - int(status) #fahr tisch auf 0  
             
             go()
