@@ -19,10 +19,10 @@ chan0 = AnalogIn(mcp, MCP.P0)
 
 wert = chan0.value
 
-if wert < 4000:
+if wert < 40000:
     print("OCCUPANCY_DETECTED")
     
-if wert > 4000:
+if wert > 40000:
     print("OCCUPANCY_NOT_DETECTED")
 
 
