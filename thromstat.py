@@ -16,8 +16,8 @@ if sys.argv[1] == "Get":
         sys.exit()
 
     if  characteristic == "TargetTemperature" or characteristic == "CoolingThresholdTemperature":
-            print("10")
-            sys.exit()
+        print("10")
+        sys.exit()
     
     if characteristic == "CurrentHeatingCoolingState" or characteristic == "TargetHeatingCoolingState":
         f = open("/home/pi/Desktop/git/Status.txt", 'r')
