@@ -1,3 +1,4 @@
+#neues problem wenn ontime kürzer als compensations time ist dies differenz zu viel fahrzeit
 import sys
 import time
 characteristic = sys.argv[3].strip("''")
@@ -19,13 +20,13 @@ def go():
     GPIO.setup(hoch,GPIO.OUT)
     GPIO.output(hoch,0)
 
-    if diff < 0 and abs(diff) > 10:
+    if diff < 0:
         ontime = abs(diff)*singlesteptime + accbrakecompensation
         GPIO.output(runter,1)
         time.sleep(ontime)
         GPIO.cleanup()
         
-    if diff > 0 and diff > 10:
+    if diff > 0:
         ontime = diff*singlesteptime + accbrakecompensation
         GPIO.output(hoch,1)
         time.sleep(ontime)
@@ -63,7 +64,7 @@ if sys.argv[1] == "Set":
     if characteristic == "On":
         if value == "0":
             diff = 0 - int(status) #fahr tisch auf null   
-
+            
             f = open("/home/pi/Desktop/git/height.txt", 'w')
             f.write(value) #schrieb höhe null in height.txt
             f.close
