@@ -48,6 +48,11 @@ def go():
     sys.exit() #if diff 0 oder kleiner 0 nichts tun
 
 if sys.argv[1] == "Get":
+    characteristic = sys.argv[3].strip("''")
+    if charcacteristic == "name":
+        print("tisch")
+        sys.exit()
+
     if characteristic == "On":
         f = open("/home/pi/Desktop/git/height.txt", 'r')
         status = f.read()
