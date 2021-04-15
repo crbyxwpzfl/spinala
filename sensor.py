@@ -8,6 +8,7 @@ from adafruit_mcp3xxx.analog_in import AnalogIn
 characteristic = sys.argv[3].strip("''")
 if charcacteristic == "name":
     print("aptv")
+    sys.exit()
 
 # create the spi bus
 spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
@@ -29,4 +30,4 @@ if wert < 40000:
 if wert > 40000:
     print("OCCUPANCY_NOT_DETECTED")
 
-
+sys.exit()
