@@ -1,3 +1,6 @@
+TEST
+
+
 import sys
 characteristic = sys.argv[3].strip("''")
 
