@@ -3,7 +3,7 @@ import sys
 import time
 characteristic = sys.argv[3].strip("''")
 
-accbrakecompensation = -0.5
+accbrakecompensation = -0.2
 totaltime = 4 - accbrakecompensation #fahrzeit von 0-100 von unten bis ganz oben
 
 singlesteptime = totaltime/100
