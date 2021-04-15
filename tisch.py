@@ -58,6 +58,11 @@ if sys.argv[1] == "Set":
               print("runter")
               print(ontime)
 
+              f = open("/home/pi/Desktop/git/height.txt", 'w')
+              f.write(value) #schrib neuen höhen wert
+              f.close
+              sys.exit()
+
           #fahr hocch
           if diff > 0:
               ontime = diff*onesteptime
@@ -65,9 +70,13 @@ if sys.argv[1] == "Set":
               print("hoch")
               print(ontime)
 
-          f = open("/home/pi/Desktop/git/height.txt", 'w')
-          f.write(value) #schrib neuen höhen wert
-          f.close
+              f = open("/home/pi/Desktop/git/height.txt", 'w')
+              f.write(value) #schrib neuen höhen wert
+              f.close
+              sys.exit()
+          
+          sys.exit() #wenn diff 0 tu nichts
+
 
 
           
