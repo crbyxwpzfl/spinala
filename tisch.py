@@ -21,7 +21,7 @@ def go():
     GPIO.setup(hoch,GPIO.OUT)
     GPIO.output(hoch,0)
 
-    if diff < 0:
+    if diff < -1:
         ontime = abs(diff)*singlesteptime + accbrakecompensation
         if ontime > 0:
             GPIO.output(runter,1)
@@ -33,7 +33,7 @@ def go():
             f.close
 
         
-    if diff > 0:
+    if diff > 1:
         ontime = diff*singlesteptime + accbrakecompensation
         if ontime > 0:
             GPIO.output(hoch,1)
