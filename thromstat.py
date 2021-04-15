@@ -53,7 +53,6 @@ if sys.argv[1] == "Get":
     
         #set status to heating
         if cputemp < 40:
-            GPIO.output(fan,0)
             f = open("/home/pi/Desktop/git/Status.txt", 'w')
             f.write("1") #status heat
             f.close
