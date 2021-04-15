@@ -48,7 +48,7 @@ if sys.argv[1] == "Set":
           totaltime = 10 #fahrzeit von 0-100 von unten bis ganz oben
           onesteptime = totaltime/100
 
-          diff = value - status
+          diff = int(value) - int(status)
           
           #fahr runter
           if diff < 0:
