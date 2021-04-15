@@ -75,8 +75,8 @@ if sys.argv[1] == "Set":
     f.close()
 
     if characteristic == "On":
-        if value == "0":
-            diff = 0 - int(status) #fahr tisch auf null   
+        if value == "0" or value == "false":
+            diff = 0 - int(status) #fahr tisch auf 0  
             
             go()
 
@@ -86,4 +86,3 @@ if sys.argv[1] == "Set":
         diff = int(value) - int(status)
 
         go()
-
