@@ -1,21 +1,18 @@
-
 #PROBLEM tisch färht langsam an daraus folgt abweichung zu durchgehender fahrzeit0-100 
 import sys
 import time
 characteristic = sys.argv[3].strip("''")
+
 
 if sys.argv[1] == "Get":
     if characteristic == "On":
         f = open("/home/pi/Desktop/git/height.txt", 'r')
         status = f.read()
         f.close()
-        
         if status != "0":
             print("1") #höhe ungleich 0 heisst an
-
         if status == "0":
             print("0") #höhe gleich 0 heisst aus
-        
         sys.exit()
 
     if characteristic == "Brightness":
@@ -25,42 +22,49 @@ if sys.argv[1] == "Get":
         print(status)
         sys.exit()
 
+
 if sys.argv[1] == "Set":
     value = sys.argv[4].strip("''")
     value = str(value)
     
-    totaltime = 10 #fahrzeit von 0-100 von unten bis ganz oben
+    import RPi.GPIO as GPIO
+    GPIO.setwarnings(False)
+    runter = 14
+    hoch = 15
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(fan,GPIO.OUT)
+
+    totaltime = 4 #fahrzeit von 0-100 von unten bis ganz oben
 
     if characteristic == "On":
         if value == "0":
-
             #fahr tisch auf 0 wenn
-            print("runter")
-            print(totaltime)
-
+            #print("runter")
+            #print(totaltime)
+            GPIO.output(runter,1)
+            time.sleep(totaltime)
+            GPIO.cleanup()
             f = open("/home/pi/Desktop/git/height.txt", 'w')
             f.write(value) #schrieb höhe null in height.txt
             f.close
-
         sys.exit() #wenn value 1 also anschalten tu nichts
-
 
     if characteristic == "Brightness":
           f = open("/home/pi/Desktop/git/height.txt", 'r')
           status = f.read() #lies alten höhen wert
           f.close()
-          
           onesteptime = totaltime/100
-
           diff = int(value) - int(status)
           
           #fahr runter
           if diff < 0:
               diff = abs(diff)
               ontime = diff*onesteptime
-              
-              print("runter")
-              print(ontime)
+              #print("runter")
+              #print(ontime)
+              GPIO.output(runter,1)
+              time.sleep(ontime)
+              GPIO.cleanup()
 
               f = open("/home/pi/Desktop/git/height.txt", 'w')
               f.write(value) #schrib neuen höhen wert
@@ -70,9 +74,11 @@ if sys.argv[1] == "Set":
           #fahr hocch
           if diff > 0:
               ontime = diff*onesteptime
-              
-              print("hoch")
-              print(ontime)
+              #print("hoch")
+              #print(ontime)
+              GPIO.output(hoch,1)
+              time.sleep(ontime)
+              GPIO.cleanup()
 
               f = open("/home/pi/Desktop/git/height.txt", 'w')
               f.write(value) #schrib neuen höhen wert
@@ -80,7 +86,3 @@ if sys.argv[1] == "Set":
               sys.exit()
           
           sys.exit() #wenn diff 0 tu nichts
-
-
-
-          
