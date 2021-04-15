@@ -29,8 +29,8 @@ if sys.argv[1] == "Set":
     
     import RPi.GPIO as GPIO
     GPIO.setwarnings(False)
-    runter = 14
-    hoch = 15
+    runter = 15
+    hoch = 14
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(runter,GPIO.OUT)
     GPIO.setup(hoch,GPIO.OUT)
