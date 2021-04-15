@@ -1,4 +1,4 @@
- import sys
+import sys
 import time
 characteristic = sys.argv[3].strip("''")
 
