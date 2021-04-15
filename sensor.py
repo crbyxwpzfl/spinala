@@ -1,1 +1,1 @@
-print("50")
+print("OCCUPANCY_DETECTED")
