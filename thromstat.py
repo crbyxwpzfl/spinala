@@ -32,8 +32,8 @@ if sys.argv[1] == "Get":
         #init gpio controll
         import RPi.GPIO as GPIO
         GPIO.setwarnings(False)
-        fan = 40
-        GPIO.setmode(GPIO.BOARD)
+        fan = 21
+        GPIO.setmode(GPIO.BCM)
         GPIO.setup(fan,GPIO.OUT)
 
         #start fan
@@ -63,8 +63,8 @@ if sys.argv[1] == "Set":
             
         import RPi.GPIO as GPIO
         GPIO.setwarnings(False)
-        fan = 40
-        GPIO.setmode(GPIO.BOARD)
+        fan = 21
+        GPIO.setmode(GPIO.BCM)
         GPIO.setup(fan,GPIO.OUT)
 
         #off
