@@ -13,7 +13,11 @@ if sys.argv[1] == "Get":
 
     if characteristic == "HeatingThresholdTemperature":
         print("0")
-        sys.exit() 
+        sys.exit()
+
+    if  characteristic == "TargetTemperature" or characteristic == "CoolingThresholdTemperature":
+            print("10")
+            sys.exit()
     
     if characteristic == "CurrentHeatingCoolingState" or characteristic == "TargetHeatingCoolingState":
         f = open("/home/pi/Desktop/git/Status.txt", 'r')
@@ -37,7 +41,7 @@ if sys.argv[1] == "Get":
         print(status)
         sys.exit()
 
-    if characteristic == "CurrentTemperature" or characteristic == "TargetTemperature" or characteristic == "CoolingThresholdTemperature":
+    if characteristic == "CurrentTemperature":
         
         #read cpu temp
         from gpiozero import CPUTemperature
