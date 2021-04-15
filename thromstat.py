@@ -27,11 +27,11 @@ if sys.argv[1] == "Get":
         GPIO.setup(fan,GPIO.OUT)
         
         #cool
-        if satus == "2":
+        if status == "2":
             GPIO.output(fan,1)
             
         #heat
-        if satus == "1":
+        if status == "1":
             GPIO.output(fan,0)
             
         print(status)
