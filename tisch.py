@@ -28,11 +28,16 @@ if sys.argv[1] == "Get":
 if sys.argv[1] == "Set":
     value = sys.argv[4].strip("''")
     value = str(value)
+    
+    totaltime = 10 #fahrzeit von 0-100 von unten bis ganz oben
 
     if characteristic == "On":
         if value == "0":
+
             #fahr tisch auf 0 wenn
-            
+            print("runter")
+            print(totaltime)
+
             f = open("/home/pi/Desktop/git/height.txt", 'w')
             f.write(value) #schrieb höhe null in height.txt
             f.close
@@ -45,7 +50,6 @@ if sys.argv[1] == "Set":
           status = f.read() #lies alten höhen wert
           f.close()
           
-          totaltime = 10 #fahrzeit von 0-100 von unten bis ganz oben
           onesteptime = totaltime/100
 
           diff = int(value) - int(status)
