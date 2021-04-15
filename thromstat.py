@@ -19,6 +19,21 @@ if sys.argv[1] == "Get":
         f = open("/home/pi/Desktop/git/Status.txt", 'r')
         status = f.read()
         f.close()
+        
+        import RPi.GPIO as GPIO
+        GPIO.setwarnings(False)
+        fan = 21
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(fan,GPIO.OUT)
+        
+        #cool
+        if satus == "2":
+            GPIO.output(fan,1)
+            
+        #heat
+        if satus == "1":
+            GPIO.output(fan,0)
+            
         print(status)
         sys.exit()
 
@@ -29,22 +44,14 @@ if sys.argv[1] == "Get":
         cpu = CPUTemperature()
         cputemp = round(cpu.temperature)
         
-        #init gpio controll
-        import RPi.GPIO as GPIO
-        GPIO.setwarnings(False)
-        fan = 21
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(fan,GPIO.OUT)
-
-        #start fan
+        #set status to cooling
         if cputemp > 50:
-            GPIO.output(fan,1)
             f = open("/home/pi/Desktop/git/Status.txt", 'w')
             f.write("2") #status cool
             f.close
 
     
-        #stop fan
+        #set status to heating
         if cputemp < 40:
             GPIO.output(fan,0)
             f = open("/home/pi/Desktop/git/Status.txt", 'w')
