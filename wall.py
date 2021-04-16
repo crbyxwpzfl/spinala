@@ -49,14 +49,14 @@ if sys.argv[1] == "Set":
         print(status)
         print(value)
         #nur wenn gerade aus dann mach an
-        if value == "1" and status == "0":
+        if value == 1 and status == 0:
             print("bin kurz vorm anmachen")
             data = '{key: Standby}'
             response = requests.post(f'https://{privates.ip}:1926/6/input/key', data=data, verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
             sys.exit()
     
         #nur wenn gerade an dann mach aus
-        if value == "0" and status == "1":
+        if value == 0 and status == 1:
             data = '{key: Standby}'
             response = requests.post(f'https://{privates.ip}:1926/6/input/key', data=data, verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
             sys.exit()
