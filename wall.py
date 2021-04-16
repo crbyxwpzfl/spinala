@@ -35,7 +35,7 @@ if sys.argv[1] == "Set":
     value = sys.argv[4].strip("''")
    
     #set volume nur wenn tv an
-    if characteristic == "Brightness" and status == "1":     
+    if characteristic == "Brightness" and int(status) == 1:     
         data = f"{{ muted: false, current: {int(value)} }}"
         response = requests.post(f'https://{privates.ip}:1926/6/audio/volume', data=data, verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
         
@@ -45,18 +45,14 @@ if sys.argv[1] == "Set":
         sys.exit()
     
     if characteristic == "On":
-        print("bin in an if")
-        print(status)
-        print(value)
         #nur wenn gerade aus dann mach an
         if int(value) == 1 and int(status) == 0:
-            print("bin kurz vorm anmachen")
             data = '{key: Standby}'
             response = requests.post(f'https://{privates.ip}:1926/6/input/key', data=data, verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
             sys.exit()
     
         #nur wenn gerade an dann mach aus
-        if value == 0 and status == 1:
+        if int(value) == 0 and int(status) == 1:
             data = '{key: Standby}'
             response = requests.post(f'https://{privates.ip}:1926/6/input/key', data=data, verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
             sys.exit()
