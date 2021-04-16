@@ -47,6 +47,7 @@ if sys.argv[1] == "Set":
     if characteristic == "On":
         print("bin in an if")
         print(status)
+        print(value)
         #nur wenn gerade aus dann mach an
         if value == "1" and status == "0":
             print("bin kurz vorm anmachen")
