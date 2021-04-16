@@ -1,14 +1,19 @@
+import requests
+
+#import privates variable
 import sys
 import os
-
 sys.path.append(os.path.abspath("/home/pi/Desktop/config/"))
 import privates
 
-import requests
+#get tv an/aus status
 from requests.auth import HTTPDigestAuth
-
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+status = 0 #standard tv ist aus
+response = requests.get(f'https://{privates.ip}:1926/6/powerstate', verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
+if "On" in str(response.content):
+    status = 1
 
 volumepath = os.path.join(privates.filepath, 'volume.txt')
 
@@ -20,25 +25,17 @@ if sys.argv[1] == "Get":
         volume = int(f.read())
         f.close()
         print(volume, end='')
+        sys.exit()
 
     if characteristic == "On":
-        response = requests.get(f'https://{privates.ip}:1926/6/powerstate', verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
-        if "On" in str(response.content):
-            print(1, end='')
-        if "Standby" in str(response.content):
-            print(0, end='')
+        print(status, end ='')
         sys.exit()
 
 if sys.argv[1] == "Set":
     value = sys.argv[4].strip("''")
-    status = 0 #standard tv ist aus
-    response = requests.get(f'https://{privates.ip}:1926/6/powerstate', verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
-    
-    if "On" in str(response.content):
-        status = 1
-    
-    #set volume
-    if characteristic == "Brightness":     
+   
+    #set volume nur wenn tv an
+    if characteristic == "Brightness" and status == "1":     
         data = f"{{ muted: false, current: {int(value)} }}"
         response = requests.post(f'https://{privates.ip}:1926/6/audio/volume', data=data, verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
         
@@ -47,16 +44,17 @@ if sys.argv[1] == "Set":
         f.close()
         sys.exit()
     
-    #wenn aus dann mach an
-    if characteristic == "On" and value == "1" and status == 0:
-        data = '{key: Standby}'
-        response = requests.post(f'https://{privates.ip}:1926/6/input/key', data=data, verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
-        sys.exit()
+    if characteristic == "On":
+        #nur wenn gerade aus dann mach an
+        if value == "1" and status == "0":
+            data = '{key: Standby}'
+            response = requests.post(f'https://{privates.ip}:1926/6/input/key', data=data, verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
+            sys.exit()
     
-    #wenn an dann mach aus
-    if characteristic == "On" and value == "0" and status == 1:
-        data = '{key: Standby}'
-        response = requests.post(f'https://{privates.ip}:1926/6/input/key', data=data, verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
-        sys.exit()
+        #nur wenn gerade an dann mach aus
+        if value == "0" and status == "1":
+            data = '{key: Standby}'
+            response = requests.post(f'https://{privates.ip}:1926/6/input/key', data=data, verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
+            sys.exit()
 
-sys.exit()
+    sys.exit()
