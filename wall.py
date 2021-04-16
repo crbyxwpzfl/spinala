@@ -40,7 +40,7 @@ if sys.argv[1] == "Set":
     #set volume
     if characteristic == "Brightness":     
         data = f"{{ muted: false, current: {int(value)} }}"
-        response = requests.post(f'https://{privates.ip}:1926/6/audio/volume', data=data, verify=False, auth=HTTPDigestAuth(pirvates.user, privates.pw))
+        response = requests.post(f'https://{privates.ip}:1926/6/audio/volume', data=data, verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
         
         f = open(volumepath, 'w')
         f.write(value)
