@@ -1,7 +1,7 @@
 import sys
 import os
 
-sys.path.append(os.path.abspath("C:/Users/roess/Desktop/config/"))
+sys.path.append(os.path.abspath("/home/pi/Desktop/config/"))
 import privates
 
 import requests
