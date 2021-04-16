@@ -49,7 +49,7 @@ def go():
 
 if sys.argv[1] == "Get":
     characteristic = sys.argv[3].strip("''")
-    if charcacteristic == "name":
+    if characteristic == "name":
         print("tisch")
         sys.exit()
 
