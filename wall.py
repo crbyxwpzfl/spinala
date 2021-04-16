@@ -46,9 +46,10 @@ if sys.argv[1] == "Set":
     
     if characteristic == "On":
         print("bin in an if")
-
+        print(status)
         #nur wenn gerade aus dann mach an
         if value == "1" and status == "0":
+            print("bin kurz vorm anmachen")
             data = '{key: Standby}'
             response = requests.post(f'https://{privates.ip}:1926/6/input/key', data=data, verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
             sys.exit()
