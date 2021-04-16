@@ -19,6 +19,7 @@ if "On" in str(response.content):
 Huepath = os.path.join(privates.filepath, 'Hue.txt')
 Brightnesspath = os.path.join(privates.filepath, 'Brightness.txt')
 Saturationpath = os.path.join(privates.filepath, 'Saturation.txt')
+Onpath = os.path.join(privates.filepath, 'On.txt')
 
 characteristic = sys.argv[3].strip("''")
 charapath = os.path.join(privates.filepath, f'{characteristic}.txt')
@@ -50,12 +51,7 @@ def go():
     response = requests.post(f'http://{privates.ip}:1925/6/ambilight/cached', data=body)
 
 
-if sys.argv[1] == "Get":    
-    if characteristic == "On":
-        print(status, end='')
-        sys.exit()
-
-    if characteristic != "On":
+if sys.argv[1] == "Get":
         f = open(charapath, 'r')
         print(int(f.read()), end='')
         f.close()
@@ -77,11 +73,19 @@ if sys.argv[1] == "Set" and int(status) == 0: #nur wenn tv aus ist
     if characteristic == "On":
         if int(value) == 1:
             go()
+
+            f = open(charapath, 'w')
+            f.write(value)
+            f.close()
             sys.exit()
             
         if int(value) == 0:
             body = "{r: 0, g: 0, b: 0}"
             response = requests.post(f'http://{privates.ip}:1925/6/ambilight/cached', data=body)
+            
+            f = open(charapath, 'w')
+            f.write(value)
+            f.close()
             sys.exit()
         
     sys.exit() #wenn tv an und ich will an machen tu nichts
