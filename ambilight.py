@@ -61,7 +61,7 @@ if sys.argv[1] == "Get":
         f.close()
         sys.exit()
 
-if sys.argv[1] == "Set" and status == "0": #nur wenn tv aus ist
+if sys.argv[1] == "Set" and int(status) == 0: #nur wenn tv aus ist
     value = sys.argv[4].strip("''") 
     
     if characteristic != "On":
@@ -69,18 +69,17 @@ if sys.argv[1] == "Set" and status == "0": #nur wenn tv aus ist
         f.write(value)
         f.close()
         
-        if 'Standby' in str(response.content):
-            go()
-            go() #ohne wdh wird abundzu falsche farbe angezeigt
+        go()
+        go() #ohne wdh wird abundzu falsche farbe angezeigt
         
         sys.exit()
 
     if characteristic == "On":
-        if value == "1":
+        if int(value) == 1:
             go()
             sys.exit()
             
-        if value == "0":
+        if int(value) == 0:
             body = "{r: 0, g: 0, b: 0}"
             response = requests.post(f'http://{privates.ip}:1925/6/ambilight/cached', data=body)
             sys.exit()
