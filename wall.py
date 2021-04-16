@@ -45,6 +45,8 @@ if sys.argv[1] == "Set":
         sys.exit()
     
     if characteristic == "On":
+        print("bin in an if")
+
         #nur wenn gerade aus dann mach an
         if value == "1" and status == "0":
             data = '{key: Standby}'
