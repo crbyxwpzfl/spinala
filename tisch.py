@@ -3,8 +3,8 @@ import sys
 import time
 characteristic = sys.argv[3].strip("''")
 
-accbrakecompensation = -0.1
-totaltime = 15 - accbrakecompensation #fahrzeit von 0-100 von unten bis ganz oben
+accbrakecompensation = 0
+totaltime = 20 - accbrakecompensation #fahrzeit von 0-100 von unten bis ganz oben
 
 singlesteptime = totaltime/100
 diff = 0
