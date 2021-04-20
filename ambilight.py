@@ -1,5 +1,3 @@
-#add timout exceptions!
-
 import requests
 import math
 
@@ -14,9 +12,17 @@ from requests.auth import HTTPDigestAuth
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 status = 0 #standard tv ist aus
-response = requests.get(f'https://{privates.ip}:1926/6/powerstate', verify=False, timeout=2, auth=HTTPDigestAuth(privates.user, privates.pw))
-if "On" in str(response.content):
-    status = 1
+try:
+    response = requests.get(f'https://{privates.ip}:1926/6/powerstate', verify=False, timeout=2, auth=HTTPDigestAuth(privates.user, privates.pw))
+except requests.exceptions.ConnectionError:
+    print("error connecting")
+    sys.exit()
+except requests.exceptions.Timeout:
+    print("timeout error")
+    sys.exit()
+else:
+    if "On" in str(response.content):
+        status = 1
 
 Huepath = os.path.join(privates.filepath, 'Hue.txt')
 Brightnesspath = os.path.join(privates.filepath, 'Brightness.txt')
@@ -50,7 +56,9 @@ def go():
 
     body = f"{{r: {int(r)}, g: {int(g)}, b: {int(b)}}}"
     #print(body)
+    
     response = requests.post(f'http://{privates.ip}:1925/6/ambilight/cached', timeout=2, data=body)
+    
 
 
 if sys.argv[1] == "Get":
