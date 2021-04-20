@@ -6,18 +6,27 @@ import os
 sys.path.append(os.path.abspath("/home/pi/Desktop/config/"))
 import privates
 
-#get tv an/aus status
-from requests.auth import HTTPDigestAuth
-import urllib3
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-status = 0 #standard tv ist aus
-response = requests.get(f'https://{privates.ip}:1926/6/powerstate', verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
-if "On" in str(response.content):
-    status = 1
-
 volumepath = os.path.join(privates.filepath, 'volume.txt')
 
 characteristic = sys.argv[3].strip("''")
+
+#get tv an/aus status
+status = 0 #standard tv ist aus
+def status():
+    import subprocess
+    from requests.auth import HTTPDigestAuth
+    import urllib3
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    try:
+        response = requests.get(f'https://{privates.ip}:1926/6/powerstate', verify=False, timeout=2, auth=HTTPDigestAuth(privates.user, privates.pw))
+    except ConnectionError:
+        print(status)
+        output = subprocess.Popen(["sudo /etc/raspap/hostapd/servicestart.sh --seconds 3"], shell = True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+        sys.exit()
+    else:
+        if "On" in str(response.content):
+            status = 1
+
 
 if sys.argv[1] == "Get":
     if characteristic == "Brightness":
@@ -28,16 +37,18 @@ if sys.argv[1] == "Get":
         sys.exit()
 
     if characteristic == "On":
+        status()
         print(status, end ='')
         sys.exit()
 
 if sys.argv[1] == "Set":
     value = sys.argv[4].strip("''")
-   
+    status()
+
     #set volume nur wenn tv an
     if characteristic == "Brightness" and int(status) == 1:     
         data = f"{{ muted: false, current: {int(value)} }}"
-        response = requests.post(f'https://{privates.ip}:1926/6/audio/volume', data=data, verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
+        response = requests.post(f'https://{privates.ip}:1926/6/audio/volume', timeout=2, data=data, verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
         
         f = open(volumepath, 'w')
         f.write(value)
@@ -48,13 +59,13 @@ if sys.argv[1] == "Set":
         #nur wenn gerade aus dann mach an
         if int(value) == 1 and int(status) == 0:
             data = '{key: Standby}'
-            response = requests.post(f'https://{privates.ip}:1926/6/input/key', data=data, verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
+            response = requests.post(f'https://{privates.ip}:1926/6/input/key', timeout=2, data=data, verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
             sys.exit()
     
         #nur wenn gerade an dann mach aus
         if int(value) == 0 and int(status) == 1:
             data = '{key: Standby}'
-            response = requests.post(f'https://{privates.ip}:1926/6/input/key', data=data, verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
+            response = requests.post(f'https://{privates.ip}:1926/6/input/key', timeout=2, data=data, verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
             sys.exit()
 
     sys.exit()
