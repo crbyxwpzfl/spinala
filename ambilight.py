@@ -12,7 +12,7 @@ from requests.auth import HTTPDigestAuth
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 status = 0 #standard tv ist aus
-response = requests.get(f'https://{privates.ip}:1926/6/powerstate', verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
+response = requests.get(f'https://{privates.ip}:1926/6/powerstate', verify=False, timeout=2, auth=HTTPDigestAuth(privates.user, privates.pw))
 if "On" in str(response.content):
     status = 1
 
@@ -48,7 +48,7 @@ def go():
 
     body = f"{{r: {int(r)}, g: {int(g)}, b: {int(b)}}}"
     #print(body)
-    response = requests.post(f'http://{privates.ip}:1925/6/ambilight/cached', data=body)
+    response = requests.post(f'http://{privates.ip}:1925/6/ambilight/cached', timeout=2, data=body)
 
 
 if sys.argv[1] == "Get":
@@ -81,7 +81,7 @@ if sys.argv[1] == "Set" and int(status) == 0: #nur wenn tv aus ist
             
         if int(value) == 0:
             body = "{r: 0, g: 0, b: 0}"
-            response = requests.post(f'http://{privates.ip}:1925/6/ambilight/cached', data=body)
+            response = requests.post(f'http://{privates.ip}:1925/6/ambilight/cached', timeout=2, data=body)
             
             f = open(charapath, 'w')
             f.write(value)
