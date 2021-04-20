@@ -34,6 +34,7 @@ def req():
         print("timeout error now restarting hotspot")
         sys.exit()
     else:
+        print("vor if")
         if "On" in str(response.content):
             status = 1
 
