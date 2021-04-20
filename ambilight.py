@@ -7,23 +7,6 @@ import os
 sys.path.append(os.path.abspath("/home/pi/Desktop/config/"))
 import privates
 
-#get tv an/aus status
-from requests.auth import HTTPDigestAuth         
-import urllib3
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-status = 0 #standard tv ist aus
-try:
-    response = requests.get(f'https://{privates.ip}:1926/6/powerstate', verify=False, timeout=2, auth=HTTPDigestAuth(privates.user, privates.pw))
-except requests.exceptions.ConnectionError:
-    print("error connecting")
-    sys.exit()
-except requests.exceptions.Timeout:
-    print("timeout error")
-    sys.exit()
-else:
-    if "On" in str(response.content):
-        status = 1
-
 Huepath = os.path.join(privates.filepath, 'Hue.txt')
 Brightnesspath = os.path.join(privates.filepath, 'Brightness.txt')
 Saturationpath = os.path.join(privates.filepath, 'Saturation.txt')
@@ -58,7 +41,6 @@ def go():
     #print(body)
     
     response = requests.post(f'http://{privates.ip}:1925/6/ambilight/cached', timeout=2, data=body)
-    
 
 
 if sys.argv[1] == "Get":
@@ -67,10 +49,27 @@ if sys.argv[1] == "Get":
         f.close()
         sys.exit()
 
-if sys.argv[1] == "Set" and int(status) == 0: #nur wenn tv aus ist
-    value = sys.argv[4].strip("''") 
+if sys.argv[1] == "Set":
+    #get tv an/aus status
+    from requests.auth import HTTPDigestAuth         
+    import urllib3
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    status = 0 #standard tv ist aus
+    try:
+        response = requests.get(f'https://{privates.ip}:1926/6/powerstate', verify=False, timeout=2, auth=HTTPDigestAuth(privates.user, privates.pw))
+    except requests.exceptions.ConnectionError:
+        print("error connecting")
+        sys.exit()
+    except requests.exceptions.Timeout:
+        print("timeout error")
+        sys.exit()
+    else:
+        if "On" in str(response.content):
+            status = 1
     
-    if characteristic != "On":
+    value = sys.argv[4].strip("''")
+    
+    if characteristic != "On" and int(status) == 0: #nur wenn tv aus ist
         f = open(charapath, 'w')
         f.write(value)
         f.close()
@@ -80,7 +79,7 @@ if sys.argv[1] == "Set" and int(status) == 0: #nur wenn tv aus ist
         
         sys.exit()
 
-    if characteristic == "On":
+    if characteristic == "On" and int(status) == 0: #nur wenn tv aus ist
         if int(value) == 1:
             go()
 
