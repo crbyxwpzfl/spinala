@@ -46,13 +46,13 @@ if sys.argv[1] == "Get":
         f = open(volumepath, 'r')
         volume = int(f.read())
         f.close()
-        print(volume, end='')
+        print(volume)
         sys.exit()
 
     if characteristic == "On":
         req()
         print("nach ausführung req()")
-        print(status, end ='')
+        print(status)
         sys.exit()
 
 if sys.argv[1] == "Set":
