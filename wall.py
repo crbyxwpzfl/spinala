@@ -21,7 +21,7 @@ def status():
         response = requests.get(f'https://{privates.ip}:1926/6/powerstate', verify=False, timeout=2, auth=HTTPDigestAuth(privates.user, privates.pw))
     except ConnectionError:
         print("hallohallo")
-        output = subprocess.Popen(["sudo /etc/raspap/hostapd/servicestart.sh --seconds 3"], shell = True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+        #output = subprocess.Popen(["sudo /etc/raspap/hostapd/servicestart.sh --seconds 3"], shell = True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         sys.exit()
     else:
         if "On" in str(response.content):
