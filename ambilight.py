@@ -1,3 +1,5 @@
+#add timout exceptions!
+
 import requests
 import math
 

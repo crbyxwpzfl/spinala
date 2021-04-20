@@ -1,3 +1,7 @@
+#add pi ffmpeg bewegugn entdeckt notification
+#evtl ambilight url rgb 000 vor hotspot restart tun damit verbindung getestet wird
+#evtl include pinging tv and other service to determin if networ or tv is down
+
 import requests
 
 #import privates variable
@@ -12,18 +16,20 @@ characteristic = sys.argv[3].strip("''")
 
 #get tv an/aus status
 status = 0 #standard tv ist aus
+import subprocess
+from requests.auth import HTTPDigestAuth
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 def req():
-    import subprocess
-    from requests.auth import HTTPDigestAuth
-    import urllib3
-    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     try:
         response = requests.get(f'https://{privates.ip}:1926/6/powerstate', verify=False, timeout=2, auth=HTTPDigestAuth(privates.user, privates.pw))
     except requests.exceptions.ConnectionError:
+        import subprocess
         output = subprocess.Popen(["sudo /etc/raspap/hostapd/servicestart.sh --seconds 3"], shell = True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         print("error connecting now restarting hotspot")
         sys.exit()
     except requests.exceptions.Timeout:
+        import subprocess
         output = subprocess.Popen(["sudo /etc/raspap/hostapd/servicestart.sh --seconds 3"], shell = True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         print("timeout error now restarting hotspot")
         sys.exit()
