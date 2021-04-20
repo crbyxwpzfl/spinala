@@ -12,7 +12,7 @@ characteristic = sys.argv[3].strip("''")
 
 #get tv an/aus status
 status = 0 #standard tv ist aus
-def status():
+def req():
     import subprocess
     from requests.auth import HTTPDigestAuth
     import urllib3
@@ -37,13 +37,13 @@ if sys.argv[1] == "Get":
         sys.exit()
 
     if characteristic == "On":
-        status()
+        req()
         print(status, end ='')
         sys.exit()
 
 if sys.argv[1] == "Set":
     value = sys.argv[4].strip("''")
-    status()
+    req()
 
     #set volume nur wenn tv an
     if characteristic == "Brightness" and int(status) == 1:     
