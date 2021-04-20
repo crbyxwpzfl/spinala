@@ -37,6 +37,8 @@ def req():
         print("vor if")
         if "On" in str(response.content):
             status = 1
+            print(status)
+            print("hab status auf 1 getan")
 
 
 if sys.argv[1] == "Get":
@@ -49,6 +51,7 @@ if sys.argv[1] == "Get":
 
     if characteristic == "On":
         req()
+        print("nach ausführung req()")
         print(status, end ='')
         sys.exit()
 
