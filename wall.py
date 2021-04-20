@@ -21,6 +21,7 @@ from requests.auth import HTTPDigestAuth
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 def req():
+    global status
     try:
         response = requests.get(f'https://{privates.ip}:1926/6/powerstate', verify=False, timeout=2, auth=HTTPDigestAuth(privates.user, privates.pw))
     except requests.exceptions.ConnectionError:
