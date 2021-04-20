@@ -19,9 +19,13 @@ def req():
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     try:
         response = requests.get(f'https://{privates.ip}:1926/6/powerstate', verify=False, timeout=2, auth=HTTPDigestAuth(privates.user, privates.pw))
-    except ConnectionError:
-        print(status)
+    except requests.exceptions.ConnectionError:
         output = subprocess.Popen(["sudo /etc/raspap/hostapd/servicestart.sh --seconds 3"], shell = True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+        print(status)
+        sys.exit()
+    except requests.exceptions.Timeout:
+        output = subprocess.Popen(["sudo /etc/raspap/hostapd/servicestart.sh --seconds 3"], shell = True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+        print(status)
         sys.exit()
     else:
         if "On" in str(response.content):
