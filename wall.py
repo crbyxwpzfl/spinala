@@ -1,7 +1,3 @@
-#add pi ffmpeg bewegugn entdeckt notification
-#evtl ambilight url rgb 000 vor hotspot restart tun damit verbindung getestet wird
-#evtl include pinging tv and other service to determin if networ or tv is down
-
 import requests
 
 #import privates variable
@@ -28,11 +24,13 @@ def req():
         import subprocess
         output = subprocess.Popen(["sudo /etc/raspap/hostapd/servicestart.sh --seconds 3"], shell = True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         print("error connecting now restarting hotspot")
+        response = requests.get('http://localhost:8080/motion?pi')
         sys.exit()
     except requests.exceptions.Timeout:
         import subprocess
         output = subprocess.Popen(["sudo /etc/raspap/hostapd/servicestart.sh --seconds 3"], shell = True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         print("timeout error now restarting hotspot")
+        response = requests.get('http://localhost:8080/motion?pi')
         sys.exit()
     else:
         if "On" in str(response.content):
