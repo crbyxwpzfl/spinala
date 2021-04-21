@@ -38,10 +38,15 @@ def go():
     if i == 5: r, g, b = v, p, q
 
     body = f"{{r: {int(r)}, g: {int(g)}, b: {int(b)}}}"
-    #print(body)
-    
-    response = requests.post(f'http://{privates.ip}:1925/6/ambilight/cached', timeout=2, data=body)
 
+    try:
+        response = requests.post(f'http://{privates.ip}:1925/6/ambilight/cached', timeout=2, data=body)
+    except requests.exceptions.ConnectionError:
+        print("---- error connecting setting ambi ----")
+        sys.exit()
+    except requests.exceptions.Timeout:
+        print("---- timeout error setting ambi ----")
+        sys.exit()
 
 if sys.argv[1] == "Get":
         f = open(charapath, 'r')
@@ -58,10 +63,10 @@ if sys.argv[1] == "Set":
     try:
         response = requests.get(f'https://{privates.ip}:1926/6/powerstate', verify=False, timeout=2, auth=HTTPDigestAuth(privates.user, privates.pw))
     except requests.exceptions.ConnectionError:
-        print("error connecting")
+        print("---- error connecting getting pow ----")
         sys.exit()
     except requests.exceptions.Timeout:
-        print("timeout error")
+        print("---- timeout error getting pow ----")
         sys.exit()
     else:
         if "On" in str(response.content):
