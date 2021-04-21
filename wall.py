@@ -25,18 +25,18 @@ def req():
         output = subprocess.Popen(['ping', '-c', '1', '-w', '1', '10.3.141.224'], stdout=subprocess.PIPE)
         if "100% packet loss" in str(output.stdout.read()): 
             output = subprocess.Popen(['sudo', '/etc/raspap/hostapd/servicestart.sh', '--seconds', '3'], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
-            print("----no connecting now restarting hotspot----")
+            print("  ----  no connection now restarting hotspot  ----  ")
             response = requests.get('http://localhost:8080/motion?pi')
-        print("----no connection but ping good----")
+        print("  ----  no connection but ping good  ----  ")
         sys.exit()
     
     except requests.exceptions.Timeout:
         output = subprocess.Popen(['ping', '-c', '1', '-w', '1', '10.3.141.224'], stdout=subprocess.PIPE)
         if "100% packet loss" in str(output.stdout.read()):
             output = subprocess.Popen(['sudo', '/etc/raspap/hostapd/servicestart.sh', '--seconds', '3'], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
-            print("----timeout now restarting hotspot----")
+            print("  ----  timeout now restarting hotspot  ----  ")
             response = requests.get('http://localhost:8080/motion?pi')
-        print("----timeout but ping good----")
+        print("  ----  timeout but ping good  ----  ")
         sys.exit()
 
     else:
