@@ -27,7 +27,9 @@ def req():
             output = subprocess.Popen(['sudo', '/etc/raspap/hostapd/servicestart.sh', '--seconds', '3'], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
             print("  ----  no connection now restarting hotspot  ----  ")
             response = requests.get('http://localhost:8080/motion?pi')
-        print("  ----  no connection but ping good  ----  ")
+        else:
+            print("  ----  no connection but ping good  ----  ")
+        
         sys.exit()
     
     except requests.exceptions.Timeout:
@@ -36,7 +38,9 @@ def req():
             output = subprocess.Popen(['sudo', '/etc/raspap/hostapd/servicestart.sh', '--seconds', '3'], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
             print("  ----  timeout now restarting hotspot  ----  ")
             response = requests.get('http://localhost:8080/motion?pi')
-        print("  ----  timeout but ping good  ----  ")
+        else:
+            print("  ----  timeout but ping good  ----  ")
+        
         sys.exit()
 
     else:
