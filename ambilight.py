@@ -42,10 +42,10 @@ def go():
     try:
         response = requests.post(f'http://{privates.ip}:1925/6/ambilight/cached', timeout=2, data=body)
     except requests.exceptions.ConnectionError:
-        print("---- error connecting setting ambi ----")
+        print("  ----  error connecting setting ambi ----  ")
         sys.exit()
     except requests.exceptions.Timeout:
-        print("---- timeout error setting ambi ----")
+        print("  ----  timeout error setting ambi  ----  ")
         sys.exit()
 
 if sys.argv[1] == "Get":
@@ -63,10 +63,10 @@ if sys.argv[1] == "Set":
     try:
         response = requests.get(f'https://{privates.ip}:1926/6/powerstate', verify=False, timeout=2, auth=HTTPDigestAuth(privates.user, privates.pw))
     except requests.exceptions.ConnectionError:
-        print("---- error connecting getting pow ----")
+        print("  ----  error connecting getting pow  ----  ")
         sys.exit()
     except requests.exceptions.Timeout:
-        print("---- timeout error getting pow ----")
+        print("  ----  timeout error getting pow  ----  ")
         sys.exit()
     else:
         if "On" in str(response.content):
