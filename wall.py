@@ -1,7 +1,3 @@
-output = subprocess.Popen(['ping', '-c', '1', '-w', '1', '10.3.141.165'], stdout=subprocess.PIPE)
-print(str(output.stdout.read()))
-
-
 import requests
 
 #import privates variable
