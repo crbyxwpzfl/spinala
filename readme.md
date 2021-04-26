@@ -15,8 +15,8 @@
 `nordvpn status` show status<br>
 `nordvpn settings` show settings<br>
 `nordvpn c` to connect<br>
-
-disable ipv6```bash
+disable ipv6
+```bash
 sysctl -w net.ipv6.conf.all.disable_ipv6=1
 sysctl -w net.ipv6.conf.default.disable_ipv6=1
 sysctl -w net.ipv6.conf.tun0.disable_ipv6=1
