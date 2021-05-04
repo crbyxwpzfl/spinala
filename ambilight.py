@@ -18,10 +18,10 @@ charapath = os.path.join(privates.filepath, f'{characteristic}.txt')
 
 def go():
     f = open(Huepath, 'r')
-    h = ((int(f.read())-7)%360)/360 #((x-farb angleichung)%360 rest ist neuer hue wert)/360 ausgabe von 0-1
+    h = int(((int(f.read())-7)%360)/360) #((x-farb angleichung)%360 rest ist neuer hue wert)/360 ausgabe von 0-1
     f.close()
     f = open(Saturationpath, 'r')
-    s = math.pow((int(f.read())/100),0.5) #(x/100)^0.5 um tv saturation settings aus zu gleichen
+    s = int(math.pow((int(f.read())/100),0.5)) #(x/100)^0.5 um tv saturation settings aus zu gleichen
     f.close()
     f = open(Brightnesspath, 'r')
     v = int(f.read())/100
@@ -95,7 +95,16 @@ if sys.argv[1] == "Set":
             
         if int(value) == 0:
             body = "{r: 0, g: 0, b: 0}"
+
+        try:
             response = requests.post(f'http://{privates.ip}:1925/6/ambilight/cached', timeout=2, data=body)
+        except requests.exceptions.ConnectionError:
+            print("  ----  error connecting turning ambi off ----  ")
+            sys.exit()
+        except requests.exceptions.Timeout:
+            print("  ----  timeout error turning ambi off ----  ")
+            sys.exit()
+
             
             f = open(charapath, 'w')
             f.write(value)
