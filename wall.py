@@ -3,7 +3,7 @@ import requests
 #import privates variable
 import sys
 import os
-sys.path.append(os.path.abspath("/home/pi/Desktop/config/"))
+sys.path.append(os.path.join(os.path.expanduser("~"), "Desktop", "private"))
 import privates
 
 volumepath = os.path.join(privates.filepath, 'volume.txt')
