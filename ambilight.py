@@ -4,7 +4,7 @@ import math
 #import privates variable
 import sys
 import os
-sys.path.append(os.path.join(os.path.expanduser("~"), "Desktop", "private"))
+sys.path.append(os.path.abspath("/home/pi/Desktop/private/"))
 import privates
 
 Huepath = os.path.join(privates.filepath, 'Hue.txt')

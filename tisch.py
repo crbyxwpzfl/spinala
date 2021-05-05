@@ -28,7 +28,7 @@ def go():
             time.sleep(ontime)
             GPIO.cleanup()
 
-            f = open("/home/pi/Desktop/git/height.txt", 'w')
+            f = open("/home/pi/Desktop/3.141/height.txt", 'w')
             f.write(value) #schrieb höhe nur wenn gefahren wird
             f.close
 
@@ -40,7 +40,7 @@ def go():
             time.sleep(ontime)
             GPIO.cleanup()
 
-            f = open("/home/pi/Desktop/git/height.txt", 'w')
+            f = open("/home/pi/Desktop/3.141/height.txt", 'w')
             f.write(value) #schrieb höhe nur wenn gefahren wird
             f.close
 
@@ -54,7 +54,7 @@ if sys.argv[1] == "Get":
         sys.exit()
 
     if characteristic == "On":
-        f = open("/home/pi/Desktop/git/height.txt", 'r')
+        f = open("/home/pi/Desktop/3.141/height.txt", 'r')
         status = f.read()
         f.close()
         if status != "0":
@@ -64,7 +64,7 @@ if sys.argv[1] == "Get":
         sys.exit()
 
     if characteristic == "Brightness":
-        f = open("/home/pi/Desktop/git/height.txt", 'r')
+        f = open("/home/pi/Desktop/3.141/height.txt", 'r')
         status = f.read()
         f.close()
         print(status)
@@ -77,7 +77,7 @@ if sys.argv[1] == "Set":
     if value == "false":
         value = 0
 
-    f = open("/home/pi/Desktop/git/height.txt", 'r')
+    f = open("/home/pi/Desktop/3.141/height.txt", 'r')
     status = f.read() #lies alten höhen wert
     f.close()
 

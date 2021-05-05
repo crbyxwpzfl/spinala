@@ -20,7 +20,7 @@ if sys.argv[1] == "Get":
         sys.exit()
     
     if characteristic == "CurrentHeatingCoolingState" or characteristic == "TargetHeatingCoolingState":
-        f = open("/home/pi/Desktop/git/Status.txt", 'r')
+        f = open("/home/pi/Desktop/3.141/Status.txt", 'r')
         status = f.read()
         f.close()
         
@@ -50,14 +50,14 @@ if sys.argv[1] == "Get":
         
         #set status to cooling
         if cputemp > 50:
-            f = open("/home/pi/Desktop/git/Status.txt", 'w')
+            f = open("/home/pi/Desktop/3.141/Status.txt", 'w')
             f.write("2") #status cool
             f.close
 
     
         #set status to heating
         if cputemp < 40:
-            f = open("/home/pi/Desktop/git/Status.txt", 'w')
+            f = open("/home/pi/Desktop/3.141/Status.txt", 'w')
             f.write("1") #status heat
             f.close
 
@@ -85,7 +85,7 @@ if sys.argv[1] == "Set":
         #heat
         if value == "1":
             GPIO.output(fan,0)
-            f = open("/home/pi/Desktop/git/Status.txt", 'w')
+            f = open("/home/pi/Desktop/3.141/Status.txt", 'w')
             f.write(value)
             f.close
             sys.exit()
@@ -93,7 +93,7 @@ if sys.argv[1] == "Set":
         #cool
         if value == "2":
             GPIO.output(fan,1)
-            f = open("/home/pi/Desktop/git/Status.txt", 'w')
+            f = open("/home/pi/Desktop/3.141/Status.txt", 'w')
             f.write(value)
             f.close
             sys.exit()
