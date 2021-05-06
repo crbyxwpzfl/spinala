@@ -14,7 +14,6 @@ Onpath = os.path.join(privates.filepath, 'On.txt')
 
 characteristic = sys.argv[3].strip("''")
 charapath = os.path.join(privates.filepath, f'{characteristic}.txt')
-print(charapath)
 
 
 def go():
@@ -88,7 +87,7 @@ if sys.argv[1] == "Set":
     if characteristic == "On" and int(status) == 0: #nur wenn tv aus ist
         if int(value) == 1:
             go()
-
+            
             f = open(charapath, 'w')
             f.write(value)
             f.close()
@@ -97,19 +96,20 @@ if sys.argv[1] == "Set":
         if int(value) == 0:
             body = "{r: 0, g: 0, b: 0}"
 
-        try:
-            response = requests.post(f'http://{privates.ip}:1925/6/ambilight/cached', timeout=2, data=body)
-        except requests.exceptions.ConnectionError:
-            print("  ----  error connecting turning ambi off ----  ")
-            sys.exit()
-        except requests.exceptions.Timeout:
-            print("  ----  timeout error turning ambi off ----  ")
-            sys.exit()
+            try:
+                response = requests.post(f'http://{privates.ip}:1925/6/ambilight/cached', timeout=2, data=body)
+            except requests.exceptions.ConnectionError:
+                print("  ----  error connecting turning ambi off ----  ")
+                sys.exit()
+            except requests.exceptions.Timeout:
+                print("  ----  timeout error turning ambi off ----  ")
+                sys.exit()
 
-            
+                
             f = open(charapath, 'w')
             f.write(value)
             f.close()
             sys.exit()
-        
-    sys.exit() #wenn tv an und ich will an machen tu nichts
+
+print("---- end of file sth went wrong -----")
+sys.exit() #wenn tv an und ich will an machen tu nichts
