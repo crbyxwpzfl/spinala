@@ -14,6 +14,7 @@ Onpath = os.path.join(privates.filepath, 'On.txt')
 
 characteristic = sys.argv[3].strip("''")
 charapath = os.path.join(privates.filepath, f'{characteristic}.txt')
+print(charapath)
 
 
 def go():
