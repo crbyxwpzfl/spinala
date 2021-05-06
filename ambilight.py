@@ -18,13 +18,13 @@ charapath = os.path.join(privates.filepath, f'{characteristic}.txt')
 
 def go():
     f = open(Huepath, 'r')
-    h = int(((int(f.read())-7)%360)/360) #((x-farb angleichung)%360 rest ist neuer hue wert)/360 ausgabe von 0-1
+    h = float(((int(f.read())-7)%360)/360) #((x-farb angleichung)%360 rest ist neuer hue wert)/360 ausgabe von 0-1
     f.close()
     f = open(Saturationpath, 'r')
-    s = int(math.pow((int(f.read())/100),0.5)) #(x/100)^0.5 um tv saturation settings aus zu gleichen
+    s = float(math.pow((int(f.read())/100),0.5)) #(x/100)^0.5 um tv saturation settings aus zu gleichen
     f.close()
     f = open(Brightnesspath, 'r')
-    v = int(f.read())/100
+    v = float(f.read())/100
     f.close()
     
     if s == 0.0: v*=255; r, g, b = v, v, v
