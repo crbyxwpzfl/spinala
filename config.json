@@ -23,7 +23,7 @@
 			"switches": false,
 			"motionTimeout": 2,
 			"videoConfig":{
-				"source": "-f fbdev -framerate 15 -i /dev/fb0",
+				"source": "-f fbdev -framerate 10 -i /dev/fb0",
 				"stillImageSource": "-f fbdev -i /dev/fb0 -t 1 -vframes 1",
 				"audio": false,
 				"maxWidth": 0,
