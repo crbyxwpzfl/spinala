@@ -44,7 +44,8 @@ sysctl -w net.ipv6.conf.tun0.disable_ipv6=1
 
 ## homebridge setup
 [install guide](https://github.com/homebridge/homebridge/wiki/Install-Homebridge-on-Raspbian) __ACHTUNG__ dont use hb-service<br>
-`sudo homebridge -D -U /var/lib/homerbidge` to start server<br>
+add `priates=/path/to/private/` with `/paht/to/private/privates.py` to `/ect/environment`<br>
+use `sudo su` meanwhile `homebridge -D -U /var/lib/homerbidge` to start server<br>
 to choose intervace `/var/lib/homerbidge/config.json`<br> 
 ```json
 {
