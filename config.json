@@ -49,7 +49,7 @@
 			"HeatingThresholdTemperature": 10,
 			"StateChangeResponseTime": 3,
 			"Cmd4_Mode": "Polled",
-			"State_cmd": "python /home/pi/Desktop/3.141/thromstat.py",
+			"State_cmd": "python -c \"import os; import sys; sys.path.append(os.environ.get('privates')); import privates; sys.path.append(privates.hbpipath); import thromst\"",
 			"Polling": [
 				{"Characteristic": "CurrentTemperature", "Interval": 60, "Timeout": 8000},
 				{"Characteristic": "TargetTemperature", "Interval": 43200, "Timeout": 8000},
@@ -64,7 +64,7 @@
 			"Polling": [
 				{"Characteristic": "OccupancyDetected", "Interval": 15, "Timeout": 1000}
 			],
-			"State_cmd": "python3 /home/pi/Desktop/3.141/sensor.py"
+			"State_cmd": "python3 -c \"import os; import sys; sys.path.append(os.environ.get('privates')); import privates; sys.path.append(privates.hbpipath); import sensor\""
 		},{
 			"Type": "Lightbulb",
 			"DisplayName": "tisch",
@@ -76,7 +76,7 @@
 				{"Characteristic": "Brightness", "Interval": 43200, "Timeout": 20000},
 				{"Characteristic": "On", "Interval": 43200, "Timeout": 20000}
 			],
-			"State_cmd": "python3 /home/pi/Desktop/3.141/tisch.py"
+			"State_cmd": "python3 -c \"import os; import sys; sys.path.append(os.environ.get('privates')); import privates; sys.path.append(privates.hbpipath); import tisch\""
 		},{
 			"type": "Lightbulb",
 			"displayName": "wall",
@@ -87,7 +87,7 @@
 				{"characteristic": "on", "interval": 60, "timeout": 8000},
 				{"characteristic": "brightness", "interval": 43200, "timeout": 8000}],
 			"stateChangeResponseTime": 1,
-			"state_cmd": "python3 /home/pi/Desktop/3.141/wall.py"
+			"state_cmd": "python3 -c \"import os; import sys; sys.path.append(os.environ.get('privates')); import privates; sys.path.append(privates.hbpipath); import wall\""
 		},{
 			"type": "Lightbulb",
 			"displayName": "ambilight",
@@ -103,7 +103,7 @@
 				{"characteristic": "hue", "interval": 43200, "timeout": 8000},
 				{"characteristic": "saturation", "interval": 43200, "timeout": 8000}
 			],
-			"state_cmd": "python3 /home/pi/Desktop/3.141/ambilight.py"
+			"state_cmd": "python3 -c \"import os; import sys; sys.path.append(os.environ.get('privates')); import privates; sys.path.append(privates.hbpipath); import ambilight\""
 		}
 	    ]
 	}
