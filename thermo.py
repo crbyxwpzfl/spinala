@@ -6,7 +6,7 @@ import privates
 
 characteristic = sys.argv[3].strip("''")
 
-charapath = os.path.join(privates.hbpipath, f'{characteristic}.txt')
+Statuspath = os.path.join(privates.hbpipath, 'Status.txt')
 
 if sys.argv[1] == "Get":
 
@@ -27,7 +27,7 @@ if sys.argv[1] == "Get":
         sys.exit()
     
     if characteristic == "CurrentHeatingCoolingState" or characteristic == "TargetHeatingCoolingState":
-        f = open(charapath, 'r')
+        f = open(Statuspath, 'r')
         status = f.read()
         f.close()
         
@@ -57,14 +57,14 @@ if sys.argv[1] == "Get":
         
         #set status to cooling
         if cputemp > 50:
-            f = open(charapath, 'w')
+            f = open(Statuspath, 'w')
             f.write("2") #status cool
             f.close
 
     
         #set status to heating
         if cputemp < 40:
-            f = open(charapath, 'w')
+            f = open(Statuspath, 'w')
             f.write("1") #status heat
             f.close
 
@@ -92,7 +92,7 @@ if sys.argv[1] == "Set":
         #heat
         if value == "1":
             GPIO.output(fan,0)
-            f = open(charapath, 'w')
+            f = open(Statuspath, 'w')
             f.write(value)
             f.close
             sys.exit()
@@ -100,7 +100,7 @@ if sys.argv[1] == "Set":
         #cool
         if value == "2":
             GPIO.output(fan,1)
-            f = open(charapath, 'w')
+            f = open(Statuspath, 'w')
             f.write(value)
             f.close
             sys.exit()

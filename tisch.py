@@ -8,7 +8,7 @@ sys.path.append(os.environ.get('privates'))
 import privates
 
 characteristic = sys.argv[3].strip("''")
-charapath = os.path.join(privates.hbpipath, f'{characteristic}.txt')
+Heightpath = os.path.join(privates.hbpipath, 'height.txt')
 
 accbrakecompensation = 0
 totaltime = 20 - accbrakecompensation #fahrzeit von 0-100 von unten bis ganz oben
@@ -35,7 +35,7 @@ def go():
             time.sleep(ontime)
             GPIO.cleanup()
 
-            f = open(charapath, 'w')
+            f = open(Heightpath, 'w')
             f.write(value) #schrieb höhe nur wenn gefahren wird
             f.close
 
@@ -47,7 +47,7 @@ def go():
             time.sleep(ontime)
             GPIO.cleanup()
 
-            f = open(charapath, 'w')
+            f = open(Heightpath, 'w')
             f.write(value) #schrieb höhe nur wenn gefahren wird
             f.close
 
@@ -61,7 +61,7 @@ if sys.argv[1] == "Get":
         sys.exit()
 
     if characteristic == "On":
-        f = open(charapath, 'r')
+        f = open(Heightpath, 'r')
         status = f.read()
         f.close()
         if status != "0":
@@ -71,7 +71,7 @@ if sys.argv[1] == "Get":
         sys.exit()
 
     if characteristic == "Brightness":
-        f = open("charapath, 'r')
+        f = open("Heightpath, 'r')
         status = f.read()
         f.close()
         print(status)
@@ -84,7 +84,7 @@ if sys.argv[1] == "Set":
     if value == "false":
         value = 0
 
-    f = open(charapath, 'r')
+    f = open(Heightpath, 'r')
     status = f.read() #lies alten höhen wert
     f.close()
 
