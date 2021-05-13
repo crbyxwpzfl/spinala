@@ -71,7 +71,7 @@ if sys.argv[1] == "Get":
         sys.exit()
 
     if characteristic == "Brightness":
-        f = open("Heightpath, 'r')
+        f = open(Heightpath, 'r')
         status = f.read()
         f.close()
         print(status)
