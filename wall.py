@@ -6,7 +6,7 @@ import os
 sys.path.append(os.environ.get('privates'))
 import privates
 
-volumepath = os.path.join(privates.filepath, 'volume.txt')
+volumepath = os.path.join(privates.hbpipath, 'volume.txt')
 
 characteristic = sys.argv[3].strip("''")
 

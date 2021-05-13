@@ -7,13 +7,13 @@ import os
 sys.path.append(os.environ.get('privates'))
 import privates
 
-Huepath = os.path.join(privates.filepath, 'Hue.txt')
-Brightnesspath = os.path.join(privates.filepath, 'Brightness.txt')
-Saturationpath = os.path.join(privates.filepath, 'Saturation.txt')
-Onpath = os.path.join(privates.filepath, 'On.txt')
+Huepath = os.path.join(privates.hbpipath, 'Hue.txt')
+Brightnesspath = os.path.join(privates.hbpipath, 'Brightness.txt')
+Saturationpath = os.path.join(privates.hbpipath, 'Saturation.txt')
+Onpath = os.path.join(privates.hbpipath, 'On.txt')
 
 characteristic = sys.argv[3].strip("''")
-charapath = os.path.join(privates.filepath, f'{characteristic}.txt')
+charapath = os.path.join(privates.hbpipath, f'{characteristic}.txt')
 
 
 def go():
