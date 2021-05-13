@@ -6,7 +6,8 @@ import os
 sys.path.append(os.environ.get('privates'))
 import privates
 
-volumepath = os.path.join(privates.hbpipath, 'volume.txt')
+characteristic = sys.argv[3].strip("''")
+charapath = os.path.join(privates.hbpipath, f'{characteristic}.txt')
 
 characteristic = sys.argv[3].strip("''")
 
@@ -50,7 +51,7 @@ def req():
 
 if sys.argv[1] == "Get":
     if characteristic == "Brightness":
-        f = open(volumepath, 'r')
+        f = open(charapath, 'r')
         volume = int(f.read())
         f.close()
         print(volume)
@@ -70,7 +71,7 @@ if sys.argv[1] == "Set":
         data = f"{{ muted: false, current: {int(value)} }}"
         response = requests.post(f'https://{privates.ip}:1926/6/audio/volume', timeout=2, data=data, verify=False, auth=HTTPDigestAuth(privates.user, privates.pw))
         
-        f = open(volumepath, 'w')
+        f = open(charapath, 'w')
         f.write(value)
         f.close()
         sys.exit()
