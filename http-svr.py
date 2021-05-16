@@ -2,7 +2,6 @@ import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import time
 
-
 class Server(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
