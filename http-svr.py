@@ -10,6 +10,13 @@ class MyServer(BaseHTTPRequestHandler):
         and control GPIO of a Raspberry Pi
     """
 
+    def do_HEAD(self):
+        """ do_HEAD() can be tested use curl command 
+            'curl -I http://server-ip-address:port' 
+        """
+        self.send_response(200)
+        self.end_headers()
+
     def do_GET(self):
         """ do_GET() can be tested using curl command 
             'curl http://server-ip-address:port' 
