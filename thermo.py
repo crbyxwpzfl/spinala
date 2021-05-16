@@ -38,11 +38,11 @@ if sys.argv[1] == "Get":
         GPIO.setup(fan,GPIO.OUT)
         
         #cool
-        if status == "2":
+        if int(status) == 2:
             GPIO.output(fan,1)
             
         #heat
-        if status == "1":
+        if int(status) == 1:
             GPIO.output(fan,0)
             
         print(status)
@@ -76,7 +76,7 @@ if sys.argv[1] == "Set":
 
     if characteristic == "TargetHeatingCoolingState":
         value = sys.argv[4].strip("''")
-        value = str(value)
+        value = int(value)
             
         import RPi.GPIO as GPIO
         GPIO.setwarnings(False)
@@ -85,12 +85,12 @@ if sys.argv[1] == "Set":
         GPIO.setup(fan,GPIO.OUT)
 
         #off
-        if value == "0" or value == "3":
+        if int(value) == 0 or int(value) == 3:
             #not handled on purpose
             sys.exit()
 
         #heat
-        if value == "1":
+        if int(value) == 1:
             GPIO.output(fan,0)
             f = open(Statuspath, 'w')
             f.write(value)
@@ -98,7 +98,7 @@ if sys.argv[1] == "Set":
             sys.exit()
 
         #cool
-        if value == "2":
+        if int(value) == 2:
             GPIO.output(fan,1)
             f = open(Statuspath, 'w')
             f.write(value)
