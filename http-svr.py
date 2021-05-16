@@ -9,7 +9,7 @@ class Server(BaseHTTPRequestHandler):
         else:
             print("self.path ist")
             print(self.path)
-            self.path = '/style.css'
+            self.path = '/'
         try:
             split_path = os.path.splitext(self.path)
             request_extension = split_path[1]
