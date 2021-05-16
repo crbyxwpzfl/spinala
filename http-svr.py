@@ -25,12 +25,6 @@ class MyServer(BaseHTTPRequestHandler):
         html = '''
             <html>
             <head>
-            <style>
-                    svg {width: 100%}
-                    #land:hover {stroke: #5cf287; stroke-width: 2; fill: #5cf287;}
-                    #na:hover {fill: #d4d4d4;}
-                    body {background-color: white;}
-            </style>
             <head>
             <body>
                     
