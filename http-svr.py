@@ -6,6 +6,9 @@ class Server(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
             self.path = '/index.html'
+        else:
+            print("self.path ist")
+            print(self.path)
         try:
             split_path = os.path.splitext(self.path)
             request_extension = split_path[1]
@@ -20,6 +23,8 @@ class Server(BaseHTTPRequestHandler):
         except:
             f = "File not found"
             self.send_error(404,f)
+
+
 
 HOST_NAME = '192.168.178.193'
 PORT = 8000
