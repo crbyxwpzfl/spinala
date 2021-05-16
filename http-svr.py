@@ -10,14 +10,6 @@ class MyServer(BaseHTTPRequestHandler):
         and control GPIO of a Raspberry Pi
     """
 
-    def do_HEAD(self):
-        """ do_HEAD() can be tested use curl command 
-            'curl -I http://server-ip-address:port' 
-        """
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
-
     def do_GET(self):
         """ do_GET() can be tested using curl command 
             'curl http://server-ip-address:port' 
@@ -25,6 +17,12 @@ class MyServer(BaseHTTPRequestHandler):
         html = '''
             <html>
             <head>
+            <style>
+                    svg {width: 100%}
+                    #land:hover {stroke: #5cf287; stroke-width: 2; fill: #5cf287;}
+                    #na:hover {fill: #d4d4d4;}
+                    body {background-color: white;}
+            </style>
             <head>
             <body>
                     
