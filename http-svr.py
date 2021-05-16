@@ -6,7 +6,7 @@ class Server(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
             self.path = '/index.html'
-        else:
+        elif self.path == '/de':
             print("self.path ist")
             print(self.path)
             self.path = '/index.html'
