@@ -82,7 +82,7 @@ class MyServer(BaseHTTPRequestHandler):
         temp = os.popen("/opt/vc/bin/vcgencmd measure_temp").read()
         
         self.do_HEAD()
-                status = ''
+        status = ''
         
         if self.path=='/':
             print("home-page")
