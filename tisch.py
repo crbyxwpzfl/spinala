@@ -64,7 +64,7 @@ if sys.argv[1] == "Get":
         f = open(Heightpath, 'r')
         status = f.read()
         f.close()
-        if status != "0":
+        if str(status) != "0":
             print("1") #höhe ungleich 0 heisst an
         if status == "0":
             print("0") #höhe gleich 0 heisst aus
