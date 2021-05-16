@@ -15,7 +15,7 @@ class MyServer(BaseHTTPRequestHandler):
             'curl -I http://server-ip-address:port' 
         """
         self.send_response(200)
-        self.send_header('Content-type', 'text/css')
+        self.send_header('Content-type', 'text/html')
         self.end_headers()
 
     def do_GET(self):
