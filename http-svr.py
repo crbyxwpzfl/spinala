@@ -2,7 +2,7 @@ import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import time
 
-#i have not a good understanding of what is happening!
+#I have not a good understanding of what is happening!
 class Server(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
