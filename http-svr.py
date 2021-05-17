@@ -25,7 +25,7 @@ class Server(BaseHTTPRequestHandler):
             
             active = str(self.path)[1:]
             print(active)
-            file = open('/home/pi/Desktop/3.141/style.css', 'w')
+            file = open('/home/pi/Desktop/3.141/some.css', 'w')
             file.write(css)
             file.close()
               
