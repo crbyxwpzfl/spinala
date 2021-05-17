@@ -13,10 +13,7 @@ class Server(BaseHTTPRequestHandler):
             
             active = str(self.path)[1:]
             print(active)
-            file = open('/home/pi/Desktop/3.141/some.css', 'w')
-            file.write(css)
-            file.close()
-            
+
             css = f''' 
                 body {{background-color: white;}}
                 #location:hover {{stroke: #6cf287; stroke-width: 4; fill: #5cf287;}}
@@ -26,6 +23,12 @@ class Server(BaseHTTPRequestHandler):
                 #{active} {{fill: #5cf287;}}
              '''
 
+
+
+            file = open('/home/pi/Desktop/3.141/some.css', 'w')
+            file.write(css)
+            file.close()
+            
             self.path = '/index.html'
         try:
             split_path = os.path.splitext(self.path)
