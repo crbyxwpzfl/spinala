@@ -22,19 +22,19 @@ class Server(BaseHTTPRequestHandler):
                 #ch {{fill: #f5f5f5;}}
                 #{active} {{fill: #5cf287;}}
 
-                @media (prefers-color-scheme: light) {
-                body {
+                @media (prefers-color-scheme: light) {{
+                body {{
                     background-color: white;
                     color: black;
-                }
-                }
+                }}
+                }}
 
-                @media (prefers-color-scheme: dark) {
-                body {
+                @media (prefers-color-scheme: dark) {{
+                body {{
                     background-color: black;
                     color: white;
-                }
-                }
+                }}
+                }}
              '''
 
 
