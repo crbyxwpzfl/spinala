@@ -15,7 +15,7 @@ class Server(BaseHTTPRequestHandler):
             print(active)
 
             css = f''' 
-                body {{background-color: white;}}
+                svg {width: 80%;}
                 #location:hover {{stroke: #6cf287; stroke-width: 4; fill: #5cf287;}}
                 #location {{fill: #f5f5f5;}}
                 #ch:hover {{stroke: none; stroke-width: none; fill: #d4d4d4;}}
