@@ -2,19 +2,7 @@ import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import time
 
-
-
 active = "none"
-
-css = f''' 
-    body {{background-color: white;}}
-    #location:hover {{stroke: #6cf287; stroke-width: 4; fill: #5cf287;}}
-    #location {{fill: #f5f5f5;}}
-    #ch:hover {{stroke: none; stroke-width: none; fill: #d4d4d4;}}
-    #ch {{fill: #f5f5f5;}}
-    #{active} {{fill: #5cf287;}}
-'''
-
 
 #I have not a good understanding of what is happening!
 class Server(BaseHTTPRequestHandler):
@@ -28,7 +16,16 @@ class Server(BaseHTTPRequestHandler):
             file = open('/home/pi/Desktop/3.141/some.css', 'w')
             file.write(css)
             file.close()
-              
+            
+            css = f''' 
+                body {{background-color: white;}}
+                #location:hover {{stroke: #6cf287; stroke-width: 4; fill: #5cf287;}}
+                #location {{fill: #f5f5f5;}}
+                #ch:hover {{stroke: none; stroke-width: none; fill: #d4d4d4;}}
+                #ch {{fill: #f5f5f5;}}
+                #{active} {{fill: #5cf287;}}
+             '''
+
             self.path = '/index.html'
         try:
             split_path = os.path.splitext(self.path)
