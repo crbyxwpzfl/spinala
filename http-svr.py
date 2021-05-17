@@ -23,7 +23,7 @@ class Server(BaseHTTPRequestHandler):
             self.path = '/index.html'
         elif self.path != '/style.css':
             
-            active = str(self.path)[1:])
+            active = str(self.path)[1:]
             print(active)
             file = open('/home/pi/Desktop/3.141/style.css', 'w')
             file.write(css)
