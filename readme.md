@@ -1,4 +1,4 @@
-## eth0 --- subnet wlan0 eth0
+## eth0 into subnet on wlan0 and eth0
 Deinstall classic networking that is managed with file `/etc/network/interfaces` and deinstall default Raspbian `dhcpcd network management. Hold programs.
 ```
 # apt --autoremove purge ifupdown`
