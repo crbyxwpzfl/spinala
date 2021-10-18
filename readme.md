@@ -26,7 +26,7 @@ install the systemd-resolved software interface.
 Configure DNS stub listener interface
 `ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf`
 
-# eth0 interface
+#### eth0 interface
 `sudo -Es`
 ```
 cat > /etc/systemd/network/04-eth0.network <<EOF
@@ -37,7 +37,7 @@ DHCP=yes
 EOF
 ```
 
-# eth1 interface
+#### eth1 interface
 `sudo -Es`
 ```
 cat > /etc/systemd/network/10-eth1.network <<EOF
@@ -57,7 +57,7 @@ DNS=1.1.1.1 8.8.8.8
 EOF
 ```
 
-# wlan0 interface
+#### wlan0 interface
 `sudo -Es`
 ```
 cat > /etc/systemd/network/08-wlan0.network <<EOF
@@ -77,7 +77,7 @@ DNS=1.1.1.1 8.8.8.8
 EOF
 ```
 
-# install hostpad
+#### install hostpad
 ```
 $ sudo -Es
 # systemctl disable wpa_supplicant.service
