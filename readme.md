@@ -134,6 +134,20 @@ ssh disable PasswordAuth in `~/etc/ssh/sshd_config`<br>
 ssh enable keypassAuth<br>
 add openssh public to `home/pi/.ssh/authorized_keys`<br>
 
+## instal librarys for mcp3008
+```
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install python3-pip
+sudo pip3 install --upgrade setuptools
+cd ~
+sudo pip3 install --upgrade adafruit-python-shell
+wget https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/raspi-blinka.py
+sudo python3 raspi-blinka.py
+sudo pip3 install adafruit-circuitpython-mcp3xxx
+```
+
+
 ## shairport sync
 [shairport sync](https://github.com/mikebrady/shairport-sync/tree/development)
 
