@@ -129,6 +129,9 @@ ssh disable PasswordAuth in `~/etc/ssh/sshd_config`<br>
 ssh enable keypassAuth<br>
 add openssh public to `home/pi/.ssh/authorized_keys`<br>
 
+## shairport sync
+[shairport sync](https://github.com/mikebrady/shairport-sync/tree/development)
+
 ## sudo apt-get install screen
 to launche screen on boot add this to `~/.bash_profile`
 ```bash
@@ -161,8 +164,6 @@ sysctl -w net.ipv6.conf.all.disable_ipv6=1
 sysctl -w net.ipv6.conf.default.disable_ipv6=1
 sysctl -w net.ipv6.conf.tun0.disable_ipv6=1
 ```
-
-## [rasspAP](https://raspap.com/#quick)
 
 ## homebridge setup
 [install guide](https://github.com/homebridge/homebridge/wiki/Install-Homebridge-on-Raspbian) __ACHTUNG__ dont use hb-service<br>
