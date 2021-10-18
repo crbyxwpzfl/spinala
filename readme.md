@@ -163,6 +163,7 @@ fi
 `nordvpn status` show status<br>
 `nordvpn settings` show settings<br>
 `nordvpn c` to connect<br>
+`nordvpn whitelist add subnet 192.168.0.0/16` whitlist subnet<br>
 #### disable ipv6
 ```bash
 sysctl -w net.ipv6.conf.all.disable_ipv6=1
