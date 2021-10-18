@@ -1,3 +1,125 @@
+## wlan0 + eth0 subnet incl. vpn
+Deinstall classic Debian networking that is managed with file `/etc/network/interfaces` and deinstall default Raspbian `dhcpcd network management. Hold programs.
+`sudo -Es`
+`apt --autoremove purge ifupdown`
+`rm -r /etc/network`
+`apt --autoremove purge dhcpcd5`
+`apt --autoremove purge isc-dhcp-client isc-dhcp-common`
+`rm -r /etc/dhcp`
+`apt --autoremove purge rsyslog`
+`apt-mark hold ifupdown dhcpcd5 isc-dhcp-client isc-dhcp-common rsyslog raspberrypi-net-mods openresolv`
+
+And enable systemd-networkd.
+`systemctl enable systemd-networkd.service`
+
+Then enable systemd-resolved.
+`systemctl enable systemd-resolved.service`
+Check D-Bus software interface.
+`systemctl status dbus.service`
+Configure NSS software interface.
+`apt --autoremove purge avahi-daemon`
+`apt-mark hold avahi-daemon`
+
+install the systemd-resolved software interface.
+`apt install libnss-resolve`
+
+Configure DNS stub listener interface
+`ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf`
+
+# eth0 interface
+`sudo -Es`
+```
+cat > /etc/systemd/network/04-eth0.network <<EOF
+[Match]
+Name=eth0
+[Network]
+DHCP=yes
+EOF
+```
+
+# eth1 interface
+`sudo -Es`
+```
+cat > /etc/systemd/network/10-eth1.network <<EOF
+[Match]
+Name=eth1
+
+[Network]
+Address=192.168.2.1/24
+MulticastDNS=yes
+#IPMasquerade is doing NAT
+IPMasquerade=yes
+DHCPServer=yes
+
+[DHCPServer]
+DNS=1.1.1.1 8.8.8.8
+
+EOF
+```
+
+# wlan0 interface
+`sudo -Es`
+```
+cat > /etc/systemd/network/08-wlan0.network <<EOF
+[Match]
+Name=wlan0
+
+[Network]
+Address=192.168.3.1/24
+MulticastDNS=yes
+#IPMasquerade is doing NAT
+IPMasquerade=yes
+DHCPServer=yes
+
+[DHCPServer]
+DNS=1.1.1.1 8.8.8.8
+
+EOF
+```
+
+# install hostpad
+```
+$ sudo -Es
+# systemctl disable wpa_supplicant.service
+# apt update
+# apt full-upgrade
+# apt install hostapd
+# systemctl stop hostapd.service
+```
+Configure the access point host software (hostapd) with this file.
+```
+# cat >/etc/hostapd/hostapd.conf <<EOF
+interface=wlan0
+driver=nl80211
+ssid=MyTestAP
+hw_mode=g
+channel=6
+wmm_enabled=0
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid=0
+wpa=2
+wpa_passphrase=VerySecretPw
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP
+rsn_pairwise=CCMP
+EOF
+```
+`# chmod 600 /etc/hostapd/hostapd.conf`
+Set DAEMON_CONF="/etc/hostapd/hostapd.conf" in /etc/default/hostapd with
+```
+# sed -i 's/^#DAEMON_CONF=.*$/DAEMON_CONF="\/etc\/hostapd\/hostapd.conf"/' /etc/default/hostapd
+# systemctl reboot
+```
+trouble shooting
+```
+# systemctl status hostapd
+# systemctl unmask hostapd
+# systemctl enable hostapd
+# systemctl start hostapd
+# rfkill unblock wlan
+```
+
 ## raspberry pi inital setup
 `pinout` prints rpis pinout __ACHTUNG__ diff between gpioNr. and board pinNr.<br>
 `ifconfig` list interfaces<br>
