@@ -1,21 +1,23 @@
-## wlan0 + eth0 subnet incl. vpn
-Deinstall classic Debian networking that is managed with file `/etc/network/interfaces` and deinstall default Raspbian `dhcpcd network management. Hold programs.
-`sudo -Es`
-`apt --autoremove purge ifupdown`
-`rm -r /etc/network`
-`apt --autoremove purge dhcpcd5`
-`apt --autoremove purge isc-dhcp-client isc-dhcp-common`
-`rm -r /etc/dhcp`
-`apt --autoremove purge rsyslog`
-`apt-mark hold ifupdown dhcpcd5 isc-dhcp-client isc-dhcp-common rsyslog raspberrypi-net-mods openresolv`
-
-And enable systemd-networkd.
+## eth0 --- subnet wlan0 eth0
+Deinstall classic networking that is managed with file `/etc/network/interfaces` and deinstall default Raspbian `dhcpcd network management. Hold programs.
+```
+# apt --autoremove purge ifupdown`
+# rm -r /etc/network`
+# apt --autoremove purge dhcpcd5`
+# apt --autoremove purge isc-dhcp-client isc-dhcp-common`
+# rm -r /etc/dhcp`
+# apt --autoremove purge rsyslog`
+# apt-mark hold ifupdown dhcpcd5 isc-dhcp-client isc-dhcp-common rsyslog raspberrypi-net-mods openresolv`
+```
+enable systemd-networkd.
 `systemctl enable systemd-networkd.service`
 
-Then enable systemd-resolved.
+then enable systemd-resolved.
 `systemctl enable systemd-resolved.service`
-Check D-Bus software interface.
+
+check D-Bus software interface.
 `systemctl status dbus.service`
+
 Configure NSS software interface.
 `apt --autoremove purge avahi-daemon`
 `apt-mark hold avahi-daemon`
@@ -23,24 +25,24 @@ Configure NSS software interface.
 install the systemd-resolved software interface.
 `apt install libnss-resolve`
 
-Configure DNS stub listener interface
+configure DNS stub listener interface
 `ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf`
 
 #### eth0 interface
-`sudo -Es`
 ```
-cat > /etc/systemd/network/04-eth0.network <<EOF
+# cat > /etc/systemd/network/04-eth0.network <<EOF
 [Match]
 Name=eth0
+
 [Network]
 DHCP=yes
+
 EOF
 ```
 
 #### eth1 interface
-`sudo -Es`
 ```
-cat > /etc/systemd/network/10-eth1.network <<EOF
+# cat > /etc/systemd/network/10-eth1.network <<EOF
 [Match]
 Name=eth1
 
@@ -58,9 +60,8 @@ EOF
 ```
 
 #### wlan0 interface
-`sudo -Es`
 ```
-cat > /etc/systemd/network/08-wlan0.network <<EOF
+# cat > /etc/systemd/network/08-wlan0.network <<EOF
 [Match]
 Name=wlan0
 
@@ -86,7 +87,8 @@ $ sudo -Es
 # apt install hostapd
 # systemctl stop hostapd.service
 ```
-Configure the access point host software (hostapd) with this file.
+
+configure the access point host software hostapd with this file.
 ```
 # cat >/etc/hostapd/hostapd.conf <<EOF
 interface=wlan0
@@ -105,12 +107,15 @@ wpa_pairwise=TKIP
 rsn_pairwise=CCMP
 EOF
 ```
+
 `# chmod 600 /etc/hostapd/hostapd.conf`
-Set DAEMON_CONF="/etc/hostapd/hostapd.conf" in /etc/default/hostapd with
+
+set DAEMON_CONF="/etc/hostapd/hostapd.conf" in /etc/default/hostapd with
 ```
 # sed -i 's/^#DAEMON_CONF=.*$/DAEMON_CONF="\/etc\/hostapd\/hostapd.conf"/' /etc/default/hostapd
 # systemctl reboot
 ```
+
 trouble shooting
 ```
 # systemctl status hostapd
