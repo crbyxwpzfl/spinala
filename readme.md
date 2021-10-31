@@ -1,4 +1,4 @@
-## from eth0 to subnet on wlan0 and eth1
+## eth0 to subnet wlan0 bridged with eth1
 Deinstall classic networking that is managed with file `/etc/network/interfaces` and deinstall default Raspbian `dhcpcd network management. Hold programs.
 ```
 # apt --autoremove purge ifupdown`
@@ -121,6 +121,11 @@ trouble shooting
 # rfkill unblock wlan
 # systemctl restart hostapd
 ```
+
+check multicast dns with `sudo systemd-resolve --status wlan0`
+to activate `sudo systemd-resolve --set-mdns=yes --interface=wlan0`
+then `sudo systemctl restart systemd-resolved`
+
 
 ## raspberry pi inital setup
 `pinout` prints rpis pinout __ACHTUNG__ diff between gpioNr. and board pinNr.<br>
