@@ -1,4 +1,4 @@
-## eth0 into subnet on wlan0 and eth1
+## from eth0 to subnet on wlan0 and eth1
 Deinstall classic networking that is managed with file `/etc/network/interfaces` and deinstall default Raspbian `dhcpcd network management. Hold programs.
 ```
 # apt --autoremove purge ifupdown`
@@ -33,11 +33,17 @@ configure DNS stub listener interface
 # cat > /etc/systemd/network/04-eth0.network <<EOF
 [Match]
 Name=eth0
-
 [Network]
+MulticastDNS=yes
 DHCP=yes
-
 EOF
+```
+
+#### br0 interface
+```
+[NetDev]
+Name=br0
+Kind=bridge
 ```
 
 #### eth1 interface
@@ -45,36 +51,25 @@ EOF
 # cat > /etc/systemd/network/10-eth1.network <<EOF
 [Match]
 Name=eth1
+[Network]
+MulticastDNS=yes
+Bridge=br0
+EOF
+```
 
+#### br0_up interface
+```
+# cat > /etc/systemd/network/16-br0_up.network <<EOF
+[Match]
+Name=br0
 [Network]
 Address=192.168.2.1/24
 MulticastDNS=yes
 #IPMasquerade is doing NAT
 IPMasquerade=yes
 DHCPServer=yes
-
 [DHCPServer]
 DNS=1.1.1.1 8.8.8.8
-
-EOF
-```
-
-#### wlan0 interface
-```
-# cat > /etc/systemd/network/08-wlan0.network <<EOF
-[Match]
-Name=wlan0
-
-[Network]
-Address=192.168.3.1/24
-MulticastDNS=yes
-#IPMasquerade is doing NAT
-IPMasquerade=yes
-DHCPServer=yes
-
-[DHCPServer]
-DNS=1.1.1.1 8.8.8.8
-
 EOF
 ```
 
@@ -93,7 +88,7 @@ configure the access point host software hostapd with this file.
 # cat >/etc/hostapd/hostapd.conf <<EOF
 interface=wlan0
 driver=nl80211
-ssid=MyTestAP
+ssid=TEST
 hw_mode=g
 channel=6
 wmm_enabled=0
@@ -105,6 +100,7 @@ wpa_passphrase=VerySecretPw
 wpa_key_mgmt=WPA-PSK
 wpa_pairwise=TKIP
 rsn_pairwise=CCMP
+bridge=br0
 EOF
 ```
 
@@ -123,6 +119,7 @@ trouble shooting
 # systemctl enable hostapd
 # systemctl start hostapd
 # rfkill unblock wlan
+# systemctl restart hostapd
 ```
 
 ## raspberry pi inital setup
@@ -146,7 +143,6 @@ wget https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/m
 sudo python3 raspi-blinka.py
 sudo pip3 install adafruit-circuitpython-mcp3xxx
 ```
-
 
 ## shairport sync
 [shairport sync](https://github.com/mikebrady/shairport-sync/tree/development)
@@ -186,10 +182,19 @@ sysctl -w net.ipv6.conf.tun0.disable_ipv6=1
 ```
 
 ## homebridge setup
-[install guide](https://github.com/homebridge/homebridge/wiki/Install-Homebridge-on-Raspbian) __ACHTUNG__ dont use hb-service<br>
-add `priates=/path/to/private/` with `/paht/to/private/privates.py` to `/etc/environment`<br>
-use `sudo su` meanwhile `homebridge -D -U /var/lib/homerbidge` to start server<br>
-to choose intervace `/var/lib/homerbidge/config.json`<br> 
+[install guide](https://github.com/homebridge/homebridge/wiki/Install-Homebridge-on-Raspbian)<br>
+add `privates=/path/to/private/` with `/paht/to/private/privates.py` to `/etc/environment`<br>
+to start manually use `sudo su` then `homebridge -D -U /path/to/` with `path/to/config.js`<br>
+
+#### hb service configuration
+add `privates=/path/to/private/` in `/etc/default/homebridge`<br>
+set `HOMEBRIDGE_OPTS=-D -U "/path/to"` with `path/to/config.js`<br>
+set UIX_STORAGE_PATH="/path/to" with `path/to/config.js`<br>
+<br>
+to run hb service as root change user in `/etc/systemd/system/homebridge.service` to root<br>
+and append `--allow-root` to `HOMEBRIDGE_OPTS=-D -U "/path/to/config" --allow-root`<br>
+
+#### to choose network intervace `/var/lib/homerbidge/config.json`<br>
 ```json
 {
 	"mdns": {"intervace": "ip-of-interface"},
