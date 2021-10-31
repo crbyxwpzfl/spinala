@@ -122,9 +122,9 @@ trouble shooting
 # systemctl restart hostapd
 ```
 
-check multicast dns with `sudo systemd-resolve --status wlan0`
-to activate `sudo systemd-resolve --set-mdns=yes --interface=wlan0`
-then `sudo systemctl restart systemd-resolved`
+check multicast dns with `sudo systemd-resolve --status wlan0`<br>
+to activate `sudo systemd-resolve --set-mdns=yes --interface=wlan0`<br>
+then `sudo systemctl restart systemd-resolved`<br>
 
 
 ## raspberry pi inital setup
