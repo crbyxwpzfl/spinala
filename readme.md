@@ -1,4 +1,4 @@
-## eth0 to subnet wlan0 bridged with eth1
+## switch to systemd networkd
 Deinstall classic networking that is managed with file `/etc/network/interfaces` and deinstall default Raspbian `dhcpcd network management. Hold programs.
 ```
 # apt --autoremove purge ifupdown`
@@ -38,6 +38,65 @@ MulticastDNS=yes
 DHCP=yes
 EOF
 ```
+
+## wpa supplicant eth0 to subnet wlan0 and subnet eth1 __unsecure__
+
+#### eth1 interface
+```
+# cat > /etc/systemd/network/10-eth1.network <<EOF
+[Match]
+Name=eth1
+[Network]
+Address=192.168.2.1/24
+MulticastDNS=yes
+#IPMasquerade is doing NAT
+IPMasquerade=yes
+DHCPServer=yes
+[DHCPServer]
+DNS=1.1.1.1 8.8.8.8
+EOF
+```
+#### wlan0 interface
+```
+# cat > /etc/systemd/network/08-wlan0.network <<EOF
+[Match]
+Name=wlan0
+[Network]
+Address=192.168.0.1/24
+MulticastDNS=yes
+#IPMasquerade is doing NAT
+IPMasquerade=yes
+DHCPServer=yes
+[DHCPServer]
+DNS=1.1.1.1 8.8.8.8
+EOF
+```
+#### wpa supplicant conf
+```
+# cat > /etc/wpa_supplicant/wpa_supplicant-wlan0.conf <<EOF
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=DE
+network={
+    ssid="TEST"
+    mode=2
+    psk="password"
+    key_mgmt=WPA-PSK
+    proto=RSN WPA
+    frequency=2412
+}
+EOF
+```
+
+```
+# chmod 600 /etc/wpa_supplicant/wpa_supplicant-wlan0.conf
+# systemctl disable wpa_supplicant.service
+# systemctl enable wpa_supplicant@wlan0.service
+# rfkill unblock wlan
+# reboot
+```
+
+## hostapd eth0 to subnet wlan0 bridged with eth1 __buggy__
 
 #### br0 interface
 ```
