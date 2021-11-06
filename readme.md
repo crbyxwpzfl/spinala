@@ -145,21 +145,39 @@ $ sudo -Es
 configure the access point host software hostapd with this file.
 ```
 # cat >/etc/hostapd/hostapd.conf <<EOF
+# interface and driver
 interface=wlan0
-driver=nl80211
-ssid=TEST
-hw_mode=g
-channel=6
-wmm_enabled=0
-macaddr_acl=0
-auth_algs=1
-ignore_broadcast_ssid=0
-wpa=2
-wpa_passphrase=VerySecretPw
-wpa_key_mgmt=WPA-PSK
-wpa_pairwise=TKIP
-rsn_pairwise=CCMP
 bridge=br0
+driver=nl80211
+
+# country setup
+country_code=DE
+ieee80211d=1
+
+# a-5ghz g-2.4ghz
+hw_mode=a
+# 0-hostapd chooses channel
+channel=48
+
+ssid=zimmer
+# 0-open 1-empty 2-empty but correct lenght ssid advertising
+ignore_broadcast_ssid=0
+
+# draft-n mode
+ieee80211n=1
+wmm_enabled=1
+
+# max client count
+max_num_sta=20
+
+# 1-open 2-WEP 3-both
+auth_algs=1
+# 1-WPA 2-WPA2 3-both
+wpa=2
+wpa_passphrase=homesharing
+wpa_key_mgmt=WPA-PSK
+# offer wpa2 encryption
+rsn_pairwise=CCMP
 EOF
 ```
 
@@ -180,6 +198,10 @@ trouble shooting
 # rfkill unblock wlan
 # systemctl restart hostapd
 ```
+
+to see avalible channels `iwlist wlan0 channel` __use 36 40 44 48__
+
+to test hostapd manually for errors `sudo /usr/sbin/hostapd /etc/hostapd/hostapd.conf`
 
 check multicast dns with `sudo systemd-resolve --status wlan0`<br>
 to activate `sudo systemd-resolve --set-mdns=yes --interface=wlan0`<br>
