@@ -1,41 +1,32 @@
 ## switch to systemd networkd
-deinstall classic networking that is managed with file `/etc/network/interfaces` and deinstall default raspbian `dhcpcd` network management Hold programs
+```bash
+~ $ sudo -Es
+apt --autoremove purge ifupdown	# deinstall classic networking that is managed with file /etc/network/interfaces
+rm -r /etc/network
+
+apt --autoremove purge dhcpcd5	# deinstall default raspbian dhcpcd network management Hold programs
+apt --autoremove purge isc-dhcp-client isc-dhcp-common`
+rm -r /etc/dhcp
+apt --autoremove purge rsyslog
+
+apt-mark hold ifupdown dhcpcd5 isc-dhcp-client isc-dhcp-common rsyslog raspberrypi-net-mods openresolv # hold stuff
+
+systemctl enable systemd-networkd.service	# enable systemd service
+
+systemctl enable systemd-resolved.service	# then enable systemd-resolved
+
+systemctl status dbus.service	# check D-Bus software interface
+
+apt --autoremove purge avahi-daemon	# configure NSS software interface
+apt-mark hold avahi-daemon
+
+apt install libnss-resolve	# install the systemd-resolved software interface.
+
+ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf	# configure DNS stub listener interface
 ```
-# apt --autoremove purge ifupdown`
-# rm -r /etc/network`
-# apt --autoremove purge dhcpcd5`
-# apt --autoremove purge isc-dhcp-client isc-dhcp-common`
-# rm -r /etc/dhcp`
-# apt --autoremove purge rsyslog`
-# apt-mark hold ifupdown dhcpcd5 isc-dhcp-client isc-dhcp-common rsyslog raspberrypi-net-mods openresolv`
-```
-enable systemd-networkd.
-```
-systemctl enable systemd-networkd.service
-```
 
-then enable systemd-resolved
-`systemctl enable systemd-resolved.service`
-
-check D-Bus software interface.
-`systemctl status dbus.service`
-
-Configure NSS software interface.
-`apt --autoremove purge avahi-daemon`
-`apt-mark hold avahi-daemon`
-
-install the systemd-resolved software interface.
-`apt install libnss-resolve`
-
-configure DNS stub listener interface
-`ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf`
-
-## hostapd eth0 to subnet wlan0 bridged with eth1 __buggy__
-
-#### eth0 interface
-```
-# cat > /etc/systemd/network/04-eth0.network <<EOF
-```
+#### interfaces fot eth0 to subnet wlan0 bridged with eth1
+`# cat > /etc/systemd/network/04-eth0.network <<EOF`
 ```editorconfig
 [Match]
 Name=eth0
@@ -44,27 +35,13 @@ Name=eth0
 MulticastDNS=yes
 DHCP=yes
 ```
-```
-EOF
-```
-
-#### br0 interface
-```
-# cat > /etc/systemd/network/02-br0.netdev <<EOF
-```
+`# cat > /etc/systemd/network/02-br0.netdev <<EOF`
 ```editorconfig
 [NetDev]
 Name=br0
 Kind=bridge
 ```
-```
-EOF
-```
-
-#### eth1 interface
-```
-# cat > /etc/systemd/network/10-eth1.network <<EOF
-```
+`# cat > /etc/systemd/network/10-eth1.network <<EOF`
 ```editorconfig
 [Match]
 Name=eth1
@@ -73,14 +50,7 @@ Name=eth1
 MulticastDNS=yes
 Bridge=br0
 ```
-```
-EOF
-```
-
-#### br0_up interface
-```
-# cat > /etc/systemd/network/16-br0_up.network <<EOF
-```
+`# cat > /etc/systemd/network/16-br0_up.network <<EOF`
 ```editorconfig
 [Match]
 Name=br0
@@ -93,24 +63,17 @@ DHCPServer=yes
 [DHCPServer]
 DNS=1.1.1.1 8.8.8.8
 ```
-```
-EOF
-```
 
 #### install hostpad
 ```
-$ sudo -Es
-# systemctl disable wpa_supplicant.service
-# apt update
-# apt full-upgrade
-# apt install hostapd
-# systemctl stop hostapd.service
+~ $ sudo -Es
+systemctl disable wpa_supplicant.service
+apt update
+apt full-upgrade
+apt install hostapd
+systemctl stop hostapd.service
 ```
-
-#### hostapd conf
-```
-# cat >/etc/hostapd/hostapd.conf <<EOF
-```
+`# cat >/etc/hostapd/hostapd.conf <<EOF`
 ```editorconfig
 # interface and driver
 interface=wlan0
@@ -146,42 +109,32 @@ wpa_key_mgmt=WPA-PSK
 # offer wpa2 encryption
 rsn_pairwise=CCMP
 ```
-```
-EOF
-```
-`# chmod 600 /etc/hostapd/hostapd.conf`
-
-#### set config file
-```
-# sed -i 's/^#DAEMON_CONF=.*$/DAEMON_CONF="\/etc\/hostapd\/hostapd.conf"/' /etc/default/hostapd
-# systemctl reboot
+```bash
+~ $ sudo -Es
+chmod 600 /etc/hostapd/hostapd.conf`
+# set config file
+sed -i 's/^#DAEMON_CONF=.*$/DAEMON_CONF="\/etc\/hostapd\/hostapd.conf"/' /etc/default/hostapd
+systemctl reboot
 ```
 
-#### hostpad service
+#### others
+```bash
+~ $ sudo -ES
+# start stop restart enable unmask status
+systemctl status hostapd
+# never sleep wifi module
+rfkill unblock wlan
+# check multicast dns
+systemd-resolve --status wlan0
+# allow mdns
+systemd-resolve --set-mdns=yes --interface=wlan0
+# check transmit power
+iwconfig
+# set transmit power
+iwconfig wlan0 txpower 10mW
+# test manually for errors
+/usr/sbin/hostapd /etc/hostapd/hostapd.conf
 ```
-# sudo systemctl status/start/stop/restart/enable/unmask hostapd
-```
-#### ap settings
-```
-# rfkill unblock wlan
-```
-```
-# systemd-resolve --status wlan0
-```
-```
-# systemd-resolve --set-mdns=yes --interface=wlan0
-```
-```
-$ iwconfig
-```
-```
-# iwconfig wlan0 txpower 10mW
-```
-#### test manually for errors
-```
-# /usr/sbin/hostapd /etc/hostapd/hostapd.conf
-```
-
 
 ## raspberry pi inital setup
 `pinout` prints rpis pinout __ACHTUNG__ diff between gpioNr. and board pinNr.<br>
