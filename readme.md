@@ -110,15 +110,6 @@ iwconfig wlan0 txpower 10mW		# set transmit power
 /usr/sbin/hostapd /etc/hostapd/hostapd.conf	# test manually for errors
 ```
 
-## raspberry pi inital setup
-`pinout` prints rpis pinout __ACHTUNG__ diff between gpioNr. and board pinNr.<br>
-`ifconfig` list interfaces<br>
-`read temp: vcgencmd measure_temp` return fantemp<br>
-<br>
-ssh disable PasswordAuth in `~/etc/ssh/sshd_config`<br>
-ssh enable keypassAuth<br>
-add openssh public to `home/pi/.ssh/authorized_keys`<br>
-
 ## instal librarys for mcp3008
 ```
 sudo apt-get update
@@ -132,8 +123,24 @@ sudo python3 raspi-blinka.py
 sudo pip3 install adafruit-circuitpython-mcp3xxx
 ```
 
-## shairport sync
-[shairport sync](https://github.com/mikebrady/shairport-sync/tree/development)
+## ssh
+```bash
+nano ~/etc/ssh/sshd_config 	# disable PasswordAuth and enable keypassAuth
+cd home/pi/.ssh/authorized_keys 	# add openssh public here 
+```
+
+## nordvpn linux
+```bash
+sh <(curl -sSf https://downloads.nordcdn.com/apps/linux/install.sh)	# install
+nordvpn login 		# login
+nordvpn status 		# show status
+nordvpn settings 	# show settings
+nordvpn c 		# to connect
+nordvpn whitelist add subnet 192.168.0.0/16 	# whitlist subnet
+sysctl -w net.ipv6.conf.all.disable_ipv6=1	# disable ipv6
+sysctl -w net.ipv6.conf.default.disable_ipv6=1
+sysctl -w net.ipv6.conf.tun0.disable_ipv6=1
+```
 
 ## sudo apt-get install screen
 to launche screen on boot add this to `~/.bash_profile`
@@ -144,43 +151,32 @@ else
 /usr/bin/screen -X hardstatus alwayslastline '[%H] %Lw%=%u %d.%m.%y %c '
 fi
 ```
-`screen -ls` list screens<br>
-`screen -d` detach from screen<br>
-`screen -r` resume attache to screen<br>
-`exit` close screen window<br>
-`Strg a c` new screen window<br>
-`Strg a ESC` enter scroll mode 'Strg u d' up down<br>
-`Strg a SPACE` cycle screen windows<br>
-`Strg a |` vertical split<br>
-`Strg a TAB` move between splits<br>
-`Strg a :remove` to remove split<br>
-
-## nordvpn linux
-`sh <(curl -sSf https://downloads.nordcdn.com/apps/linux/install.sh)` install<br>
-`nordvpn login` login<br>
-`nordvpn status` show status<br>
-`nordvpn settings` show settings<br>
-`nordvpn c` to connect<br>
-`nordvpn whitelist add subnet 192.168.0.0/16` whitlist subnet<br>
-#### disable ipv6
 ```bash
-sysctl -w net.ipv6.conf.all.disable_ipv6=1
-sysctl -w net.ipv6.conf.default.disable_ipv6=1
-sysctl -w net.ipv6.conf.tun0.disable_ipv6=1
+screen -ls 	# list screens<br>
+screen -d 	# detach from screen<br>
+screen -r	# resume attache to screen<br>
+exit 		# close screen window<br>
+Strg a c	# new screen window<br>
+Strg a ESC 	# enter scroll mode 'Strg u d' up down<br>
+Strg a SPACE 	# cycle screen windows<br>
+Strg a | 	# vertical split<br>
+Strg a TAB 	# move between splits<br>
+Strg a :remove 	# to remove split<br>
 ```
 
-## homebridge setup
-[install guide](https://github.com/homebridge/homebridge/wiki/Install-Homebridge-on-Raspbian)<br>
-add `privates=/path/to/private/` with `/paht/to/private/privates.py` to `/etc/environment`<br>
-to start manually use `sudo su` then `homebridge -D -U /path/to/` with `path/to/config.js`<br>
-
+# [homebridge](https://github.com/homebridge/homebridge/wiki/Install-Homebridge-on-Raspbian)
+```bash
+nano /etc/environment 		# append privates=/path/to/private/ with /paht/to/private/privates.py
+sudo homebridge -D -U /path/to/ 	# with path/to/config.js to start hb manually
+```
 #### hb service configuration
-add `privates=/path/to/private/` in `/etc/default/homebridge`<br>
-set `HOMEBRIDGE_OPTS=-D -U "/path/to"` with `path/to/config.js`<br>
-set UIX_STORAGE_PATH="/path/to" with `path/to/config.js`<br>
-<br>
-to run hb service as root change user in `/etc/systemd/system/homebridge.service` to root<br>
-and append `--allow-root` to `HOMEBRIDGE_OPTS=-D -U "/path/to/config" --allow-root`<br>
+```bash
+nano /etc/default/homebridge 	# append privates=/path/to/private/ 
+				# set HOMEBRIDGE_OPTS=-D -U "/path/to" and UIX_STORAGE_PATH="/path/to" with path/to/config.js
+
+nano /etc/systemd/system/homebridge.service 	# change user to root to run hb as root
+nano /etc/default/homebridge 			# HOMEBRIDGE_OPTS=-D -U "/path/to/config" --allow-root
+```
 
 #### to choose network intervace `/var/lib/homerbidge/config.json`<br>
 ```json
@@ -191,32 +187,31 @@ and append `--allow-root` to `HOMEBRIDGE_OPTS=-D -U "/path/to/config" --allow-ro
 		"username": "...",
 		"port": ...,
 		"pin": "..."
-	},
-	"description": "...",
-	"accessories": [
-		...
-	],
-	"platforms": [
-...
-	]
-}
 ```
 #### camera ffmpeg plugin
-replace `/usr/lib/node_modules/homebridge-camera-ffmpeg/node_modules/ffmpeg-for-homebridge/ffmpeg` #ffmpeg bundled with plugin<br>
-with `usr/bin/ffmpeg` #ffmpeg bundled with rasbian full img<br>
-to capture desktop when booting to desktop use this in config<br>
+```bash
+cp -f usr/bin/ffmpeg /usr/lib/node_modules/homebridge-camera-ffmpeg/node_modules/ffmpeg-for-homebridge/ffmpeg
+	# replace ffmpeg bundled with plugin with ffmpeg bundled with rasbian full img
+```
 ```json
+"_comment": "to capture desktop when booting to desktop use this in config",
 "source": "-f x11grab -r 10 -video_size 1280x720 -i :0.0",
 "stillImageSource": "-f x11grab -t 1 -video_size 1280x720 -i :0.0 -vframes 1",
-```
-to capture cli when booting to cli use this in config<br>
-```
+
+"_comment": "to capture cli when booting to cli use this in config",
 "source": "-f fbdev -framerate 15 -i /dev/fb0"
 "stillimageSource": "-f fbdev -i /dev/fb0 -t 1 -vframes 1"
 ```
 
-## python
-to control fan<br>
+## usefull others
+```bash
+pinout 		# prints rpis pinout __ACHTUNG__ diff between gpioNr. and board pinNr
+ifconfig 	# list interfaces
+vcgencmd measure_temp	# return fantemp
+```
+[shairport sync](https://github.com/mikebrady/shairport-sync/tree/development)
+
+#### python to control fan
 ```python
 import RPi.GPIO as GPIO
 fan = 8
@@ -225,7 +220,7 @@ GPIO.output(fan, 1)
 GPIO.cleanup()
 ```
 
-to read mcp3008<br>
+#### python to read mcp3008
 ```python
 mport os
 import time
@@ -257,7 +252,7 @@ while True:
     time.sleep(0.2)
 ```
 
-to gert cpu temp<br>
+#### python to gert cpu temp
 ```pyhton
 from gpiozero import CPUTemperature
 
