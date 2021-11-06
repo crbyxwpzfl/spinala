@@ -67,29 +67,29 @@ systemctl stop hostapd.service
 ```
 `# cat >/etc/hostapd/hostapd.conf <<EOF`
 ```editorconfig
-interface=wlan0			# interface and driver
+interface=wlan0		# interface and driver
 bridge=br0
 driver=nl80211
 
-country_code=DE			# country setup
+country_code=DE		# country setup
 ieee80211d=1
 
-hw_mode=a			# a-5ghz g-2.4ghz !!hostapd does not like inline comments here
-channel=48			# 0-hostapd chooses channel is broken 36 40 44 48 are working to see avalible channels $ iwlist wlan0 channel
+hw_mode=a		# a-5ghz g-2.4ghz !!hostapd does not like inline comments here
+channel=48		# 0-hostapd chooses channel is broken 36 40 44 48 are working to see avalible channels $ iwlist wlan0 channel
 
 ssid=zimmer
 ignore_broadcast_ssid=0		# 0-open 1-empty 2-empty but correct lenght ssid advertising
 
-ieee80211n=1			# draft-n mode
+ieee80211n=1		# draft-n mode
 wmm_enabled=1
 
-max_num_sta=20			# max client count
+max_num_sta=20		# max client count
 
-auth_algs=1			# 1-open 2-WEP 3-both
-wpa=2				# 1-WPA 2-WPA2 3-both
+auth_algs=1		# 1-open 2-WEP 3-both
+wpa=2			# 1-WPA 2-WPA2 3-both
 wpa_passphrase=homesharing
 wpa_key_mgmt=WPA-PSK
-rsn_pairwise=CCMP		# offer wpa2 encryption
+rsn_pairwise=CCMP	# offer wpa2 encryption
 ```
 ```bash
 ~ $ sudo -Es
