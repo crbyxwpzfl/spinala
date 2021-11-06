@@ -1,27 +1,19 @@
 ## switch to systemd networkd
 ```bash
 ~ $ sudo -Es
-apt --autoremove purge ifupdown	# deinstall classic networking that is managed with file /etc/network/interfaces
+apt --autoremove purge ifupdown		# deinstall classic networking that is managed with file /etc/network/interfaces
 rm -r /etc/network
-
-apt --autoremove purge dhcpcd5	# deinstall default raspbian dhcpcd network management Hold programs
-apt --autoremove purge isc-dhcp-client isc-dhcp-common`
+apt --autoremove purge dhcpcd5		# deinstall default raspbian dhcpcd network management Hold programs
+apt --autoremove purge isc-dhcp-client isc-dhcp-common
 rm -r /etc/dhcp
 apt --autoremove purge rsyslog
-
-apt-mark hold ifupdown dhcpcd5 isc-dhcp-client isc-dhcp-common rsyslog raspberrypi-net-mods openresolv # hold stuff
-
+apt-mark hold ifupdown dhcpcd5 isc-dhcp-client isc-dhcp-common rsyslog raspberrypi-net-mods openresolv	# hold stuff
 systemctl enable systemd-networkd.service	# enable systemd service
-
 systemctl enable systemd-resolved.service	# then enable systemd-resolved
-
-systemctl status dbus.service	# check D-Bus software interface
-
-apt --autoremove purge avahi-daemon	# configure NSS software interface
+systemctl status dbus.service			# check D-Bus software interface
+apt --autoremove purge avahi-daemon		# configure NSS software interface
 apt-mark hold avahi-daemon
-
-apt install libnss-resolve	# install the systemd-resolved software interface.
-
+apt install libnss-resolve			# install the systemd-resolved software interface.
 ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf	# configure DNS stub listener interface
 ```
 
@@ -75,65 +67,47 @@ systemctl stop hostapd.service
 ```
 `# cat >/etc/hostapd/hostapd.conf <<EOF`
 ```editorconfig
-# interface and driver
-interface=wlan0
+interface=wlan0			# interface and driver
 bridge=br0
 driver=nl80211
 
-# country setup
-country_code=DE
+country_code=DE			# country setup
 ieee80211d=1
 
-# a-5ghz g-2.4ghz
-hw_mode=a
-# 0-hostapd chooses channel is broken 36 40 44 48 are working to see avalible channels $ iwlist wlan0 channel
-channel=48
+hw_mode=a			# a-5ghz g-2.4ghz !!hostapd does not like inline comments here
+channel=48			# 0-hostapd chooses channel is broken 36 40 44 48 are working to see avalible channels $ iwlist wlan0 channel
 
 ssid=zimmer
-# 0-open 1-empty 2-empty but correct lenght ssid advertising
-ignore_broadcast_ssid=0
+ignore_broadcast_ssid=0		# 0-open 1-empty 2-empty but correct lenght ssid advertising
 
-# draft-n mode
-ieee80211n=1
+ieee80211n=1			# draft-n mode
 wmm_enabled=1
 
-# max client count
-max_num_sta=20
+max_num_sta=20			# max client count
 
-# 1-open 2-WEP 3-both
-auth_algs=1
-# 1-WPA 2-WPA2 3-both
-wpa=2
+auth_algs=1			# 1-open 2-WEP 3-both
+wpa=2				# 1-WPA 2-WPA2 3-both
 wpa_passphrase=homesharing
 wpa_key_mgmt=WPA-PSK
-# offer wpa2 encryption
-rsn_pairwise=CCMP
+rsn_pairwise=CCMP		# offer wpa2 encryption
 ```
 ```bash
 ~ $ sudo -Es
-chmod 600 /etc/hostapd/hostapd.conf`
-# set config file
-sed -i 's/^#DAEMON_CONF=.*$/DAEMON_CONF="\/etc\/hostapd\/hostapd.conf"/' /etc/default/hostapd
+chmod 600 /etc/hostapd/hostapd.conf	# set accessrights
+sed -i 's/^#DAEMON_CONF=.*$/DAEMON_CONF="\/etc\/hostapd\/hostapd.conf"/' /etc/default/hostapd 	# set config file
 systemctl reboot
 ```
 
 #### others
 ```bash
 ~ $ sudo -ES
-# start stop restart enable unmask status
-systemctl status hostapd
-# never sleep wifi module
-rfkill unblock wlan
-# check multicast dns
-systemd-resolve --status wlan0
-# allow mdns
-systemd-resolve --set-mdns=yes --interface=wlan0
-# check transmit power
-iwconfig
-# set transmit power
-iwconfig wlan0 txpower 10mW
-# test manually for errors
-/usr/sbin/hostapd /etc/hostapd/hostapd.conf
+systemctl status hostapd		# start stop restart enable unmask status
+rfkill unblock wlan			# never sleep wifi module
+systemd-resolve --status wlan0		# check multicast dns
+systemd-resolve --set-mdns=yes --interface=wlan0	# allow mdns
+iwconfig				# check transmit power
+iwconfig wlan0 txpower 10mW		# set transmit power
+/usr/sbin/hostapd /etc/hostapd/hostapd.conf	# test manually for errors
 ```
 
 ## raspberry pi inital setup
