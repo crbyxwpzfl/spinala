@@ -1,5 +1,5 @@
 ## switch to systemd networkd
-Deinstall classic networking that is managed with file `/etc/network/interfaces` and deinstall default Raspbian `dhcpcd network management. Hold programs.
+deinstall classic networking that is managed with file `/etc/network/interfaces` and deinstall default raspbian `dhcpcd` network management Hold programs
 ```
 # apt --autoremove purge ifupdown`
 # rm -r /etc/network`
@@ -10,9 +10,11 @@ Deinstall classic networking that is managed with file `/etc/network/interfaces`
 # apt-mark hold ifupdown dhcpcd5 isc-dhcp-client isc-dhcp-common rsyslog raspberrypi-net-mods openresolv`
 ```
 enable systemd-networkd.
-`systemctl enable systemd-networkd.service`
+```
+systemctl enable systemd-networkd.service
+```
 
-then enable systemd-resolved.
+then enable systemd-resolved
 `systemctl enable systemd-resolved.service`
 
 check D-Bus software interface.
@@ -28,97 +30,58 @@ install the systemd-resolved software interface.
 configure DNS stub listener interface
 `ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf`
 
+## hostapd eth0 to subnet wlan0 bridged with eth1 __buggy__
+
 #### eth0 interface
 ```
 # cat > /etc/systemd/network/04-eth0.network <<EOF
+```
+```editorconfig
 [Match]
 Name=eth0
+
 [Network]
 MulticastDNS=yes
 DHCP=yes
+```
+```
 EOF
 ```
-
-## wpa supplicant eth0 to subnet wlan0 and subnet eth1 __unsecure__
-
-#### eth1 interface
-```
-# cat > /etc/systemd/network/10-eth1.network <<EOF
-[Match]
-Name=eth1
-[Network]
-Address=192.168.2.1/24
-MulticastDNS=yes
-#IPMasquerade is doing NAT
-IPMasquerade=yes
-DHCPServer=yes
-[DHCPServer]
-DNS=1.1.1.1 8.8.8.8
-EOF
-```
-#### wlan0 interface
-```
-# cat > /etc/systemd/network/08-wlan0.network <<EOF
-[Match]
-Name=wlan0
-[Network]
-Address=192.168.0.1/24
-MulticastDNS=yes
-#IPMasquerade is doing NAT
-IPMasquerade=yes
-DHCPServer=yes
-[DHCPServer]
-DNS=1.1.1.1 8.8.8.8
-EOF
-```
-#### wpa supplicant conf
-```
-# cat > /etc/wpa_supplicant/wpa_supplicant-wlan0.conf <<EOF
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-update_config=1
-country=DE
-network={
-    ssid="TEST"
-    mode=2
-    psk="password"
-    key_mgmt=WPA-PSK
-    proto=RSN WPA
-    frequency=2412
-}
-EOF
-```
-
-```
-# chmod 600 /etc/wpa_supplicant/wpa_supplicant-wlan0.conf
-# systemctl disable wpa_supplicant.service
-# systemctl enable wpa_supplicant@wlan0.service
-# rfkill unblock wlan
-# reboot
-```
-
-## hostapd eth0 to subnet wlan0 bridged with eth1 __buggy__
 
 #### br0 interface
 ```
+# cat > /etc/systemd/network/02-br0.netdev <<EOF
+```
+```editorconfig
 [NetDev]
 Name=br0
 Kind=bridge
 ```
+```
+EOF
+```
 
 #### eth1 interface
 ```
 # cat > /etc/systemd/network/10-eth1.network <<EOF
+```
+```editorconfig
 [Match]
 Name=eth1
+
 [Network]
 MulticastDNS=yes
 Bridge=br0
+```
+```
 EOF
 ```
 
 #### br0_up interface
 ```
 # cat > /etc/systemd/network/16-br0_up.network <<EOF
+```
+```editorconfig
 [Match]
 Name=br0
 [Network]
@@ -129,6 +92,8 @@ IPMasquerade=yes
 DHCPServer=yes
 [DHCPServer]
 DNS=1.1.1.1 8.8.8.8
+```
+```
 EOF
 ```
 
@@ -142,9 +107,11 @@ $ sudo -Es
 # systemctl stop hostapd.service
 ```
 
-configure the access point host software hostapd with this file.
+#### hostapd conf
 ```
 # cat >/etc/hostapd/hostapd.conf <<EOF
+```
+```editorconfig
 # interface and driver
 interface=wlan0
 bridge=br0
@@ -156,7 +123,7 @@ ieee80211d=1
 
 # a-5ghz g-2.4ghz
 hw_mode=a
-# 0-hostapd chooses channel
+# 0-hostapd chooses channel is broken 36 40 44 48 are working to see avalible channels $ iwlist wlan0 channel
 channel=48
 
 ssid=zimmer
@@ -178,34 +145,42 @@ wpa_passphrase=homesharing
 wpa_key_mgmt=WPA-PSK
 # offer wpa2 encryption
 rsn_pairwise=CCMP
+```
+```
 EOF
 ```
-
 `# chmod 600 /etc/hostapd/hostapd.conf`
 
-set DAEMON_CONF="/etc/hostapd/hostapd.conf" in /etc/default/hostapd with
+#### set config file
 ```
 # sed -i 's/^#DAEMON_CONF=.*$/DAEMON_CONF="\/etc\/hostapd\/hostapd.conf"/' /etc/default/hostapd
 # systemctl reboot
 ```
 
-trouble shooting
+#### hostpad service
 ```
-# systemctl status hostapd
-# systemctl unmask hostapd
-# systemctl enable hostapd
-# systemctl start hostapd
+# sudo systemctl status/start/stop/restart/enable/unmask hostapd
+```
+#### ap settings
+```
 # rfkill unblock wlan
-# systemctl restart hostapd
 ```
-
-to see avalible channels `iwlist wlan0 channel` __use 36 40 44 48__
-
-to test hostapd manually for errors `sudo /usr/sbin/hostapd /etc/hostapd/hostapd.conf`
-
-check multicast dns with `sudo systemd-resolve --status wlan0`<br>
-to activate `sudo systemd-resolve --set-mdns=yes --interface=wlan0`<br>
-then `sudo systemctl restart systemd-resolved`<br>
+```
+# systemd-resolve --status wlan0
+```
+```
+# systemd-resolve --set-mdns=yes --interface=wlan0
+```
+```
+$ iwconfig
+```
+```
+# iwconfig wlan0 txpower 10mW
+```
+#### test manually for errors
+```
+# /usr/sbin/hostapd /etc/hostapd/hostapd.conf
+```
 
 
 ## raspberry pi inital setup
