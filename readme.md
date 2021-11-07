@@ -143,7 +143,9 @@ sysctl -w net.ipv6.conf.tun0.disable_ipv6=1
 ```
 
 ## sudo apt-get install screen
-to launche screen on boot add this to `~/.bash_profile`
+```bash
+nano ~/.bash_profile	#launche screen on boot add
+```
 ```bash
 if  [ -z $STY ] && [ $TERM != "screen" ]; then
 /usr/bin/screen -xRR;
