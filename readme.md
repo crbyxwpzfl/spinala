@@ -17,7 +17,7 @@ apt install libnss-resolve			# install the systemd-resolved software interface.
 ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf	# configure DNS stub listener interface
 ```
 
-#### interfaces fot eth0 to subnet wlan0 bridged with eth1
+### interfaces fot eth0 to subnet wlan0 bridged with eth1
 `# cat > /etc/systemd/network/04-eth0.network <<EOF`
 ```editorconfig
 [Match]
