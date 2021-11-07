@@ -105,8 +105,8 @@ systemctl status hostapd		# start stop restart enable unmask status
 rfkill unblock wlan			# never sleep wifi module
 systemd-resolve --status wlan0		# check multicast dns
 systemd-resolve --set-mdns=yes --interface=wlan0	# allow mdns
-iwconfig				# check transmit power
-iwconfig wlan0 txpower 10mW		# set transmit power
+iw dev wlan0 info				# check transmit power
+iw dev welan0 set txpower limit 100		# set transmit power
 /usr/sbin/hostapd /etc/hostapd/hostapd.conf	# test manually for errors
 ```
 
