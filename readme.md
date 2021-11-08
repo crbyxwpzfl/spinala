@@ -129,7 +129,7 @@ nano ~/etc/ssh/sshd_config 	# disable PasswordAuth and enable keypassAuth
 cd home/pi/.ssh/authorized_keys 	# add openssh public here 
 ```
 
-## nordvpn linux
+## [nordvpn linux](https://support.nordvpn.com/Connectivity/Linux/1325531132/Installing-and-using-NordVPN-on-Debian-Ubuntu-Raspberry-Pi-Elementary-OS-and-Linux-Mint.htm)
 ```bash
 sh <(curl -sSf https://downloads.nordcdn.com/apps/linux/install.sh)	# install
 nordvpn login 		# login
