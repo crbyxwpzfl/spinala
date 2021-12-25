@@ -136,10 +136,17 @@ nordvpn login 		# login
 nordvpn status 		# show status
 nordvpn settings 	# show settings
 nordvpn c 		# to connect
+nordvpn countries # list countries 
+
 nordvpn whitelist add subnet 192.168.0.0/16 	# whitlist subnet
+
 sysctl -w net.ipv6.conf.all.disable_ipv6=1	# disable ipv6
 sysctl -w net.ipv6.conf.default.disable_ipv6=1
 sysctl -w net.ipv6.conf.tun0.disable_ipv6=1
+
+sudo apt-get update	# update nordvpn
+sudo apt-get upgrade
+sudo apt-get install nordvpn
 ```
 
 ## sudo apt-get install screen
@@ -211,7 +218,6 @@ pinout 		# prints rpis pinout __ACHTUNG__ diff between gpioNr. and board pinNr
 ifconfig 	# list interfaces
 vcgencmd measure_temp	# return fantemp
 ```
-[shairport sync](https://github.com/mikebrady/shairport-sync/tree/development)
 
 #### python to control fan
 ```python
