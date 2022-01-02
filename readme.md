@@ -1,3 +1,14 @@
+```
+strg k #github spotlight
+```
+
+```
+. #vs code in browser
+alt #toggle menue bar
+crtl shit g #source controll
+crtl shift e #explorer
+```
+
 ## switch to systemd networkd
 ```bash
 ~ $ sudo -Es
