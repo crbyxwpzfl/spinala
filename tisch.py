@@ -3,12 +3,9 @@ import time
 
 #import privates variable
 import sys
-import os
-sys.path.append(os.environ.get('privates'))
-import privates
 
 characteristic = sys.argv[3].strip("''")
-Heightpath = os.path.join(privates.hbpipath, 'height.txt')
+Heightpath = "/home/pi/spinala/hight.txt"
 
 accbrakecompensation = 0
 totaltime = 20 - accbrakecompensation #fahrzeit von 0-100 von unten bis ganz oben

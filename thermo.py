@@ -1,12 +1,9 @@
 #import privates variable
 import sys
-import os
-sys.path.append(os.environ.get('privates'))
-import privates
 
 characteristic = sys.argv[3].strip("''")
 
-Statuspath = os.path.join(privates.hbpipath, 'Status.txt')
+Statuspath = "/home/pi/spinala/Status.txt"
 
 if sys.argv[1] == "Get":
 
