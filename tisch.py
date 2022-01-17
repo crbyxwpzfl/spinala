@@ -67,7 +67,7 @@ if sys.argv[1] == "Get":
             print("0") #höhe gleich 0 heisst aus
         sys.exit()
 
-    if characteristic == "rotationSpeed":
+    if characteristic == "RotationSpeed":
         f = open(Heightpath, 'r')
         status = f.read()
         f.close()
@@ -93,7 +93,7 @@ if sys.argv[1] == "Set":
 
         sys.exit() #wenn value 1 also anschalten tu nichts
 
-    if characteristic == "rotationSpeed":
+    if characteristic == "RotationSpeed":
         diff = int(value) - int(status)
 
         go()
