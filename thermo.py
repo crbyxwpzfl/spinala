@@ -53,14 +53,14 @@ if sys.argv[1] == "Get":
         cputemp = round(cpu.temperature)
         
         #set status to cooling
-        if cputemp > 50:
+        if cputemp > 40:
             f = open(Statuspath, 'w')
             f.write("2") #status cool
             f.close
 
     
         #set status to heating
-        if cputemp < 40:
+        if cputemp < 30:
             f = open(Statuspath, 'w')
             f.write("1") #status heat
             f.close
