@@ -13,10 +13,10 @@ def Get():
     return d['h'] if sys.argv[1].strip("''") == 'Set' else print(d['h']) # return for 'Set' and print fot 'Get'
 
 def Set():
-    while Get() < int( sys.argv[4].strip("''") ) and GPIO.input(d['downpin']) == 0 : # lift when position delta pos and 'downpin' off
+    while Get() < int( sys.argv[4].strip("''") - 10) and GPIO.input(d['downpin']) == 0 : # lift when position delta pos and 'downpin' off
         GPIO.output(d['uppin'], True)
 
-    while Get() > int( sys.argv[4].strip("''") ) and GPIO.input(d['uppin']) == 0 : # lowwer when position delta neg and 'uppin' off
+    while Get() + 10 > int( sys.argv[4].strip("''") + 10 ) and GPIO.input(d['uppin']) == 0 : # lowwer when position delta neg and 'uppin' off
         GPIO.output(d['downpin'], True)
 
     GPIO.output(d['downpin'], False) # stop driving
@@ -29,4 +29,4 @@ GPIO.setup(d['echopin'], GPIO.IN) # 'echopin' input
 GPIO.setup(d['uppin'],GPIO.OUT)
 GPIO.setup(d['downpin'],GPIO.OUT)
 d.get(sys.argv[1].strip("''"))() # call 'Get' or 'Set'
-GPIO.cleanup() # lots of warnings with conurrent calls because previous script doesnt reach cleanup dont know how to fix 
+GPIO.cleanup() # lots of warnings with conurrent calls because previous script doesnt reach cleanup dont know how to fix
