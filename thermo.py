@@ -2,6 +2,7 @@ import sys
 import RPi.GPIO as GPIO
 import os
 
+
 def Get():
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(d['fanpin'],GPIO.OUT)
