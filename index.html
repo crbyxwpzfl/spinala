@@ -15,17 +15,17 @@
 <body>
 <script>
 function load(ccode, color, strokewidth) { //build css and favs according to passed ccode as selected
-    var linktag = document.createElement('link'); linktag.rel = "apple-touch-icon"; linktag.sizes="180x180"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/apple-touch-icon.png`;
+    var linktag = document.createElement('link'); linktag.rel = "apple-touch-icon"; linktag.sizes="180x180"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/apple-touch-icon.png?${new Date().getTime()}`;
     document.getElementsByTagName('link')[0].replaceWith(linktag)
-    var linktag = document.createElement('link'); linktag.rel = "icon"; linktag.type = "image/png"; linktag.sizes="32x32"; linktag.type="image/svg+xml"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/favicon-32x32.png`;
+    var linktag = document.createElement('link'); linktag.rel = "icon"; linktag.type = "image/png"; linktag.sizes="32x32"; linktag.type="image/svg+xml"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/favicon-32x32.png?${new Date().getTime()}`;
     document.getElementsByTagName('link')[1].replaceWith(linktag)
-    var linktag = document.createElement('link'); linktag.rel = "icon"; linktag.type = "image/png"; linktag.sizes="16x16"; linktag.type="image/svg+xml"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/favicon-16x16.png`;
+    var linktag = document.createElement('link'); linktag.rel = "icon"; linktag.type = "image/png"; linktag.sizes="16x16"; linktag.type="image/svg+xml"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/favicon-16x16.png?${new Date().getTime()}`;
     document.getElementsByTagName('link')[2].replaceWith(linktag)
-    var linktag = document.createElement('link'); linktag.rel = "manifest"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/site.webmanifest`;
+    var linktag = document.createElement('link'); linktag.rel = "manifest"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/site.webmanifest?${new Date().getTime()}`;
     document.getElementsByTagName('link')[3].replaceWith(linktag)
-    var linktag = document.createElement('link'); linktag.rel = "mask-icon"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/safari-pinned-tab.svg`; linktag.color = "#5bbad5";
+    var linktag = document.createElement('link'); linktag.rel = "mask-icon"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/safari-pinned-tab.svg?${new Date().getTime()}`; linktag.color = "#5bbad5";
     document.getElementsByTagName('link')[4].replaceWith(linktag)
-    var linktag = document.createElement('link'); linktag.rel = "shortcut icon"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/favicon.ico`;
+    var linktag = document.createElement('link'); linktag.rel = "shortcut icon"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/favicon.ico?${new Date().getTime()}`;
     document.getElementsByTagName('link')[5].replaceWith(linktag)
 
     var styletag = document.createElement('style')
@@ -46,7 +46,7 @@ function load(ccode, color, strokewidth) { //build css and favs according to pas
                         `
     document.getElementsByTagName('style')[0].replaceWith(styletag)
 }
-window.onload = load("de", "#fc4444")
+window.onload = load("de", "#fc4444", 1)
 </script>
 <div align="center">
 <svg x="0pt" y="0pt" width="800pt" height="600pt" viewBox="0 0 800 600">
