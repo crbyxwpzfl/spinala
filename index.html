@@ -15,7 +15,7 @@
 <body>
 <script>
 function load(ccode, color, strokewidth) { //build css and favs according to passed ccode as selected
-    var linktag = document.createElement('link'); linktag.rel = "apple-touch-icon"; linktag.sizes="180x180"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/apple-touch-icon.png?${new Date().getTime()}`;
+    var linktag = document.createElement('link'); linktag.rel = "apple-touch-icon"; linktag.sizes="180x180"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/apple-touch-icon.png?${new Date().getTime()}`;  /* force browser to update fav */
     document.getElementsByTagName('link')[0].replaceWith(linktag)
     var linktag = document.createElement('link'); linktag.rel = "icon"; linktag.type = "image/png"; linktag.sizes="32x32"; linktag.type="image/svg+xml"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/favicon-32x32.png?${new Date().getTime()}`;
     document.getElementsByTagName('link')[1].replaceWith(linktag)
