@@ -2,16 +2,12 @@
 <html>
 <head>
 <title>push vpn to location</title>
-<link rel="icon" type="image/svg+xml" href="https://github.com/crbyxwpzfl/spinala/raw/main/locs/off.svg">
-<link rel="apple-touch-icon" sizes="180x180" href="https://github.com/crbyxwpzfl/spinala/raw/main/locs/de/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://github.com/crbyxwpzfl/spinala/raw/main/locs/de/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="https://github.com/crbyxwpzfl/spinala/raw/main/locs/de/favicon-16x16.png">
-<link rel="manifest" href="https://github.com/crbyxwpzfl/spinala/raw/main/locs/de/site.webmanifest">
-<link rel="mask-icon" href="https://github.com/crbyxwpzfl/spinala/raw/main/locs/de/safari-pinned-tab.svg" color="#5bbad5">
-<link rel="shortcut icon" href="https://github.com/crbyxwpzfl/spinala/raw/main/locs/de/favicon.ico">
-<meta name="msapplication-TileColor" content="#da532c">
-<meta name="msapplication-config" content="https://github.com/crbyxwpzfl/spinala/raw/main/locs/de/browserconfig.xml">
-<meta name="theme-color" content="#ffffff">
+<link rel="apple-touch-icon" sizes="180x180" href="/locs/de/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/locs/de/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/locs/de/favicon-16x16.png">
+<link rel="manifest" href="/locs/de/site.webmanifest">
+<link rel="mask-icon" href="/locs/de/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="/locs/de/favicon.ico">
 <style>
     /* default style */
 </style>
@@ -19,8 +15,19 @@
 <body>
 <script>
 function load(ccode, color) { //build css and favs according to passed ccode as selected
-    document.createElement('link')
-    
+    var linktag = document.createElement('link'); linktag.rel = "apple-touch-icon"; linktag.sizes="180x180"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/apple-touch-icon.png`;
+    document.getElementsByTagName('link')[0].replaceWith(linktag)
+    var linktag = document.createElement('link'); linktag.rel = "icon"; linktag.type = "image/png"; linktag.sizes="32x32"; linktag.type="image/svg+xml"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/favicon-32x32.png`;
+    document.getElementsByTagName('link')[1].replaceWith(linktag)
+    var linktag = document.createElement('link'); linktag.rel = "icon"; linktag.type = "image/png"; linktag.sizes="16x16"; linktag.type="image/svg+xml"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/favicon-16x16.png`;
+    document.getElementsByTagName('link')[2].replaceWith(linktag)
+    var linktag = document.createElement('link'); linktag.rel = "manifest"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/site.webmanifest`;
+    document.getElementsByTagName('link')[3].replaceWith(linktag)
+    var linktag = document.createElement('link'); linktag.rel = "mask-icon"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/safari-pinned-tab.svg`; linktag.color = "#5bbad5";
+    document.getElementsByTagName('link')[4].replaceWith(linktag)
+    var linktag = document.createElement('link'); linktag.rel = "shortcut icon"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/favicon.ico`;
+    document.getElementsByTagName('link')[5].replaceWith(linktag)
+
     var styletag = document.createElement('style')
     styletag.innerHTML = `
                         #${ccode} {fill: ${color};}  /* set color and ccode according to on off state */
