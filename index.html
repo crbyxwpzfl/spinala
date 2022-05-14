@@ -35,7 +35,7 @@ function load(ccode, color, strokewidth) { //build css and favs according to pas
     var metata = document.createElement('meta'); metatag.property = "og:title"; metatag.content = "new iphone";
     document.getElementsByTagName('meta')[0].replaceWith(metatag)
     var metata = document.createElement('meta'); metatag.property = "og:image"; metatag.content = "https://www.apple.com/v/iphone/home/bg/images/meta/iphone__ky2k6x5u6vue_og.png?202205111341";
-    document.getElementsByTagName('link')[1].replaceWith(metatag)
+    document.getElementsByTagName('meta')[1].replaceWith(metatag)
 
     var styletag = document.createElement('style')
     styletag.innerHTML = `
