@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>push vpn to location</title>
-<link id="0">
+<link id="0"> <!-- will be replaced by js on load -->
 <link id="1">
 <link id="2">
 <link id="3">
@@ -13,10 +13,6 @@
 </style>
 </head>
 <body>
-    
-<meta property="og:title" content="iPhone" />
-<meta property="og:image" content="https://www.apple.com/v/iphone/home/t/images/home/og.png?201610171354" />
-
 <script>
 function load(ccode, color, strokewidth) { //build css and favs according to passed ccode as selected
     var linktag = document.createElement('link'); linktag.rel = "apple-touch-icon"; linktag.sizes="180x180"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/apple-touch-icon.png?${new Date().getTime()}`;  /* force browser to update fav */
@@ -31,11 +27,6 @@ function load(ccode, color, strokewidth) { //build css and favs according to pas
     document.getElementsByTagName('link')[4].replaceWith(linktag)
     var linktag = document.createElement('link'); linktag.rel = "shortcut icon"; linktag.href = `https://github.com/crbyxwpzfl/spinala/raw/main/locs/${ccode}/favicon.ico?${new Date().getTime()}`;
     document.getElementsByTagName('link')[5].replaceWith(linktag)
-
-    var metatag = document.createElement('meta'); metatag.property = "og:title"; metatag.content = "new iphone";
-    document.getElementsByTagName('meta')[0].replaceWith(metatag)
-    var metatag = document.createElement('meta'); metatag.property = "og:image"; metatag.content = "https://www.apple.com/v/iphone/home/bg/images/meta/iphone__ky2k6x5u6vue_og.png?202205111341";
-    document.getElementsByTagName('meta')[1].replaceWith(metatag)
 
     var styletag = document.createElement('style')
     styletag.innerHTML = `
@@ -53,8 +44,14 @@ function load(ccode, color, strokewidth) { //build css and favs according to pas
                         `
     document.getElementsByTagName('style')[0].replaceWith(styletag)
 }
+
 window.onload = load( "off", "#fc4444", 1 )
+
 </script>
+
+<meta property="og:title" content="white" />  <!-- imessage wont execute js so these musst be set via github push -->
+<meta property="og:image" content="https://github.com/crbyxwpzfl/spinala/blob/main/og-br.png?raw=true"/>
+
 <div align="center">
 <svg x="0pt" y="0pt" width="800pt" height="600pt" viewBox="0 0 800 600">
     <g id="locations">
