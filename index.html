@@ -12,6 +12,10 @@
     /* default style */
 </style>
 
+
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="##1b1b1b" media="(prefers-color-scheme: dark)">
+
 </head>
 <body>
 <script>
@@ -41,7 +45,7 @@ function load(ccode, color, strokewidth) { //build css and favs according to pas
                         svg {width: 90%;}
                         
                         @media (prefers-color-scheme: light) { body {background-color: white;} }
-                        @media (prefers-color-scheme: dark) { body {background-color: black;} }
+                        @media (prefers-color-scheme: dark) { body {background-color: #1b1b1b;} }
                         `
     document.getElementsByTagName('style')[0].replaceWith(styletag)
 }
