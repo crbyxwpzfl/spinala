@@ -1,4 +1,4 @@
-#run 'pkill -9 -f tisch.py' befor to avoid bricking the previous script in while loop on concurrent calls
+#run 'pkill -9 -f tisch.py' befor to avoid bricking the previous script in while loop on concurrent calls this is so bad aaah
 
 import RPi.GPIO as GPIO
 import time
