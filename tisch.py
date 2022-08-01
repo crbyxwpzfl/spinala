@@ -1,3 +1,5 @@
+# final height XXX
+
 import RPi.GPIO as GPIO
 import time
 import sys
@@ -7,6 +9,9 @@ def sub():
 
 def read(): # return final height to current instance of move()
     # read line and return hight
+    for line in fileinput.input([os.path.join(d['puthere'], 'transfer', 'reposetories', 'spinala', 'index.html')], inplace=True): # open file and overwrite lines
+        if fileinput.filelineno() == 1: d['final'] = line[:3]
+        print(line, end='')
 
 def move(): # in the right direction
     while Get() < read() - 3 and GPIO.input(d['downpin']) == 0: # lift when position delta pos and 'downpin' off including some correction values
@@ -34,6 +39,9 @@ def Get(): # current pos via sensor
 def Set(): # wirte final hight to line
     
     # wirte RotationSpeed to line in same file
+    d['line10'] = f"XXX"
+    for line in fileinput.input([os.path.join(d['puthere'], 'transfer', 'reposetories', 'spinala', 'index.html')], inplace=True): # open file and overwrite lines
+        print(d['line10'], end='') if fileinput.filelineno() == 10 else print(line, end='')
     
     # spawn move() when 'pgrep -lf tisch.py' < 2 current instance plus potentialy running move()
 
