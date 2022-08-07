@@ -1,21 +1,17 @@
-
-
-# this shit with kiling previous run dow not work with home bridge
-# implement propper move
-# wich reads from a file the final hieght and moves accordingly
-# as far as homebridge is concerned just write value to a file and exit
-
-
 import RPi.GPIO as GPIO
 import time
 import sys
 import subprocess
+import pathlib # for calling itself
 
 def sub(cmdstring, waitforcompletion): # string here because shell true because only way of chaning commands
      p = subprocess.Popen(cmdstring , text=False, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
      if waitforcompletion: return p.communicate()[0].decode() # this will wait for subprocess to finisih
 
 def move(): # in the right direction
+    GPIO.setup(d['uppin'], GPIO.OUT) # init move pins just on set so that set can run while get senses pos
+    GPIO.setup(d['downpin'], GPIO.OUT)
+
     while sense() not in range( int(sys.argv[4]) - 10 , int(sys.argv[4]) ): # some fine tuning is to be done to reach true zero every time here
         if d['h'] > int(sys.argv[4]): GPIO.output(d['uppin'], False); GPIO.output(d['downpin'], True)
         if d['h'] < int(sys.argv[4]): GPIO.output(d['uppin'], True); GPIO.output(d['downpin'], False)
@@ -33,18 +29,19 @@ def sense(): # current pos via sensor
     time.sleep(0.2) # pause for when called via while in 'Set' no good but one line shorter
     return d['h'] if sys.argv[4:] else print(int(d['h']/d['h'])) if sys.argv[3].strip("'") == 'On' and d['h'] else print(int(d['h'])) # return for 'Set' and print 1 for 'Get' 'On' else print h
 
-d = {'Set': move, 'Get': sense, 'triggerpin': 17, 'echopin': 27, 'uppin': 14, 'downpin': 15, 'up': 0.003370, 'down': 0.000545} # set 'pins' set 'up' 'down' to 'echo' - 'pulse' at position max min
+def head(): # just when 'Set' and vlaue not 1 so Set On 0 works but Set On 1 does not
+    if sub('pgrep -lfc tisch.py', True).strip('\n') > 1 and sys.argv[4:] != ['1']: sub('pkill -of tisch.py', True) # kill oldest tisch.py when more than 2 are running
+    sub(f'python3 {pathlib.Path(__file__).resolve()} move to height {sys.argv[4]} & disown', False)
 
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM) # gpio Modus BOARD or BCM
-GPIO.setup(d['echopin'], GPIO.IN) # 'echopin' input
-GPIO.setup(d['triggerpin'], GPIO.OUT) # 'triggerpin' output
 
-if sys.argv[1] == 'Set': GPIO.setup(d['uppin'], GPIO.OUT) # init move pins just on set so that set can run in while get senses pos
-if sys.argv[1] == 'Set': GPIO.setup(d['downpin'], GPIO.OUT)
+d = {'move': move, 'Set': head, 'Get': sense, 'triggerpin': 17, 'echopin': 27, 'uppin': 14, 'downpin': 15, 'up': 0.003370, 'down': 0.000545} # set 'pins' set 'up' 'down' to 'echo' - 'pulse' at position max min
 
-if sub('pgrep -lfc tisch.py', True).strip('\n') > 1 and sys.argv[1] == 'Set': sub('pkill -of tisch.py', True) # kill oldest tisch.py when more than 2 are running
+if sys.argv[4:] != ['1']: GPIO.setwarnings(False)
+if sys.argv[4:] != ['1']: GPIO.setmode(GPIO.BCM) # gpio Modus BOARD or BCM
 
-if not sys.argv[4:] or sys.argv[4:] != ['1']: d.get(sys.argv[1].strip("''"))() # call 'Get' or 'Set'
+if sys.argv[4:] != ['1']: GPIO.setup(d['echopin'], GPIO.IN) # 'echopin' input
+if sys.argv[4:] != ['1']: GPIO.setup(d['triggerpin'], GPIO.OUT) # 'triggerpin' output
 
-GPIO.cleanup() # lots of warnings with conurrent calls because previous script doesnt reach cleanup dont know how to fix perhaps with checking for running python process
+if sys.argv[4:] != ['1']: d.get(sys.argv[1].strip("''"))() # call 'Get' or 'Set' ignoring set on/rotspeed 1
+
+if sys.argv[4:] != ['1']: GPIO.cleanup() # lots of warnings with conurrent calls because previous script doesnt reach cleanup dont know how to fix perhaps with spawning seperate move instance and here just telling it where to go
