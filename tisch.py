@@ -31,7 +31,7 @@ def sense(): # current pos via sensor
 
 def head(): # just when 'Set' and vlaue not 1 so Set On 0 works but Set On 1 does not
     # perhaps try while here to close all old instances except current one
-    if int(sub('pgrep -lfc tisch.py', True).strip('\n')) > 1 and sys.argv[4:] != ['1']: sub('pkill -of tisch.py', True) # kill oldest tisch.py when more than 2 are running
+    if int(sub('pgrep -lfc tisch.py', True).strip('\n')) > 2 and sys.argv[4:] != ['1']: sub('pkill -of tisch.py', True) # kill oldest tisch.py when more than 2 are running
     sub(f'python3 {pathlib.Path(__file__).resolve()} move to height {sys.argv[4]} & disown', False)
 
 
