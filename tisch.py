@@ -1,3 +1,11 @@
+
+
+# this shit with kiling previous run dow not work with home bridge
+# implement propper move
+# wich reads from a file the final hieght and moves accordingly
+# as far as homebridge is concerned just write value to a file and exit
+
+
 import RPi.GPIO as GPIO
 import time
 import sys
