@@ -30,14 +30,11 @@ def sense(): # current pos via sensor
     return d['h'] if sys.argv[4:] else print(int(d['h']/d['h'])) if sys.argv[3].strip("'") == 'On' and d['h'] else print(int(d['h'])) # return for 'Set' and print 1 for 'Get' 'On' else print h
 
 def head(): # just when 'Set' and vlaue not 1 so Set On 0 works but Set On 1 does not
-    # perhaps try while here to close all old instances except current one
-    # this perhaps causes problems on rapid calls so that first call does not spawn move befor it gets killed by next call
-    # but this does not explain why lightbulb worked fine hmm
-    if int(sub('pgrep -lfc tisch.py', True).strip('\n')) > 2 and sys.argv[4:] != ['1']: sub('pkill -of tisch.py', True) # kill oldest tisch.py when more than 2 are running
+    while int(sub('pgrep -lfc move', True).strip('\n')) > 1 and sys.argv[4:] != ['1']: sub('pkill -of move', True) # kill oldest tisch.py when more than 2 are running
     sub(f'python3 {pathlib.Path(__file__).resolve()} move to height {sys.argv[4]} & disown', False)
 
-
 d = {'move': move, 'Set': head, 'Get': sense, 'triggerpin': 17, 'echopin': 27, 'uppin': 14, 'downpin': 15, 'up': 0.003370, 'down': 0.000545} # set 'pins' set 'up' 'down' to 'echo' - 'pulse' at position max min
+
 
 if sys.argv[4:] != ['1']: GPIO.setwarnings(False)
 if sys.argv[4:] != ['1']: GPIO.setmode(GPIO.BCM) # gpio Modus BOARD or BCM
