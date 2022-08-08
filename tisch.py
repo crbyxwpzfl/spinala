@@ -30,7 +30,7 @@ def sense(): # current pos via sensor
     return d['h'] if sys.argv[4:] else print(int(d['h']/d['h'])) if sys.argv[3].strip("'") == 'On' and d['h'] else print(int(d['h'])) # return for 'Set' and print 1 for 'Get' 'On' else print h
 
 def head(): # just when 'Set' and vlaue not 1 so Set On 0 works but Set On 1 does not
-    while int(sub('pgrep -lfc move', True).strip('\n')) > 1 and sys.argv[4:] != ['1']: sub('pkill -of move', True) # kill oldest tisch.py when more than 2 are running
+    while int(sub('pgrep -lfc move', True).strip('\n')) > 1 and sys.argv[4:] != ['1']: sub('pkill -of move', True) # kill oldest move as long as more than 1 is running so paralell gets are responsive and all sets exit cleanly and ocasional double moves get reduced to one
     sub(f'python3 {pathlib.Path(__file__).resolve()} move to height {sys.argv[4]} & disown', False)
 
 d = {'move': move, 'Set': head, 'Get': sense, 'triggerpin': 17, 'echopin': 27, 'uppin': 14, 'downpin': 15, 'up': 0.003370, 'down': 0.000545} # set 'pins' set 'up' 'down' to 'echo' - 'pulse' at position max min
