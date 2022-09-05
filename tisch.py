@@ -25,16 +25,15 @@ def sense(): # current pos via sensor
     GPIO.output(d['triggerpin'], False)
     while GPIO.input(d['echopin']) == 0: d['pulse'] = time.time() # time when pulse is out
     while GPIO.input(d['echopin']) == 1: d['echo'] = time.time() # time when echo returns
-    d['h'] = int(( (d['echo']-(d['pulse']) -d['down'])/(d['up']-d['down']))*100 ) # 'echo' 'pulse' time delta translated into 1 to 100
+    d['h'] = int( ( (d['echo']-d['pulse']-d['down']) / (d['up']-d['down']) )*100 - d['downshift'] ) # 'echo' 'pulse' time delta translated into 1 to 100 hight including slight down bias
     time.sleep(0.2) # pause for when called via while in 'Set' no good but one line shorter
-    return d['h'] if sys.argv[4:] else print(int(d['h']/d['h'])) if sys.argv[3].strip("'") == 'On' and d['h'] else print(int(d['h'])) # return for 'Set' and print 1 for 'Get' 'On' else print h
+    return d['h'] if sys.argv[4:] else print(d['echo']-d['pulse']) if sys.argv[2] == 'cali' else print( max( min(d['h'],1), 0) ) if sys.argv[3] == 'On' else print(max(d['h'],0)) # return for 'Set' else print 1/0 for 'Get' 'On' else print hight for 'Get' 'Rotspeed' else print raw hight for 'Get' 'cali' to calibarate up/down
 
 def head(): # just when 'Set' and vlaue not 1 so Set On 0 works but Set On 1 does not
     while int(sub('pgrep -lfc move', True).strip('\n')) > 1 and sys.argv[4:] != ['1']: sub('pkill -of move', True) # kill oldest move as long as more than 1 is running so paralell gets are responsive and all sets exit cleanly and ocasional double moves get reduced to one
     sub(f'python3 {pathlib.Path(__file__).resolve()} move to height {sys.argv[4]} & disown', False)
 
-d = {'move': move, 'Set': head, 'Get': sense, 'triggerpin': 17, 'echopin': 27, 'uppin': 14, 'downpin': 15, 'up': 0.003370, 'down': 0.000545} # set 'pins' set 'up' 'down' to 'echo' - 'pulse' at position max min
-
+d = {'move': move, 'Set': head, 'Get': sense, 'triggerpin': 17, 'echopin': 27, 'uppin': 14, 'downpin': 15, 'up': 0.006590, 'down': 0.004060, 'downshift': 1} # set 'pins' set 'up'/'down' to 'Get' 'cali' at position top/bottom
 
 if sys.argv[4:] != ['1']: GPIO.setwarnings(False)
 if sys.argv[4:] != ['1']: GPIO.setmode(GPIO.BCM) # gpio Modus BOARD or BCM
