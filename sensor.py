@@ -1,4 +1,4 @@
-# apple tv on state detection via light sensor not currently in use
+# to be moved to gists apple tv on state detection via light sensor not currently in use
 
 import os
 import sys
