@@ -159,3 +159,20 @@ sudo apt-get update	# update nordvpn
 sudo apt-get upgrade
 sudo apt-get install nordvpn
 ```
+
+## switch hostname
+```sh
+sudo raspi-config # network hostname then reboot
+```
+
+## switch username
+```sh
+sudo passwd  # root pw to lgoin later
+sudo nano /etc/ssh/sshd_config  # edit ssh so permitrootlogin, PasswordAuthentication, ChallengeResponseAuthentication is yes
+sudo service ssh restart
+# lgin as root
+usermod -l userneme pi #  first new name then old name default pi
+usermod -m -d /home/username username #  rename home dir
+# login with new user theretically no reboot
+sudo passwd -l root #  perhaps lock root user again
+```
