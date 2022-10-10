@@ -3,7 +3,7 @@ strg k #github spotlight
 ```
 
 ```
-. #vs code in browser
+vscode.dev #vs code in browser
 alt #toggle menue bar
 crtl shit g #source controll
 crtl shift e #explorer
