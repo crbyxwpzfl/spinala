@@ -176,3 +176,18 @@ usermod -m -d /home/username username #  rename home dir
 # login with new user theretically no reboot
 sudo passwd -l root #  perhaps lock root user again
 ```
+## turn power led off
+```sh
+sudo nano /boot/config.txt  # add this under [pi4]
+```
+```sh
+[pi4] 
+# disable red power led
+dtparam=pwr_led_trigger=none
+dtparam=pwr_led_activelow=off
+```
+
+## GPIO 14 issue
+```sh
+sudo raspi-config  # under interface options turn all serial port things off
+```
