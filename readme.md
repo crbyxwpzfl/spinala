@@ -5,8 +5,6 @@ strg k #github spotlight
 ```
 vscode.dev #vs code in browser
 alt #toggle menue bar
-crtl shit g #source controll
-crtl shift e #explorer
 ```
 
 ## switch to systemd networkd
@@ -121,19 +119,6 @@ iw dev welan0 set txpower limit 100		# set transmit power
 /usr/sbin/hostapd /etc/hostapd/hostapd.conf	# test manually for errors
 ```
 
-## instal librarys for mcp3008
-```
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt-get install python3-pip
-sudo pip3 install --upgrade setuptools
-cd ~
-sudo pip3 install --upgrade adafruit-python-shell
-wget https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/raspi-blinka.py
-sudo python3 raspi-blinka.py
-sudo pip3 install adafruit-circuitpython-mcp3xxx
-```
-
 ## ssh
 ```bash
 nano ~/etc/ssh/sshd_config 	# disable PasswordAuth and enable keypassAuth
@@ -158,6 +143,15 @@ sysctl -w net.ipv6.conf.tun0.disable_ipv6=1
 sudo apt-get update	# update nordvpn
 sudo apt-get upgrade
 sudo apt-get install nordvpn
+```
+
+## [maintain os](https://www.raspberrypi.com/software/operating-systems/)
+```sh
+cat /etc/os-release | grep PRETTY  # show current os
+sudo apt update  # only works whil vpn on some screw up with network setup curlpit perhaps dhcp not sure
+apt list --upgradable  # list all there is to update
+sudo apt dist-upgrade  # actually update
+sudo apt clean  # cleanup
 ```
 
 ## switch hostname
