@@ -33,7 +33,7 @@ def head(): # just when 'Set' and vlaue not 1 so Set On 0 works but Set On 1 doe
     while int(sub('pgrep -lfc move', True).strip('\n')) > 1 and sys.argv[4:] != ['1']: sub('pkill -of move', True) # kill oldest move as long as more than 1 is running so paralell gets are responsive and all sets exit cleanly and ocasional double moves get reduced to one
     sub(f'python3 {pathlib.Path(__file__).resolve()} move to height {sys.argv[4]} & disown', False)
 
-d = {'move': move, 'Set': head, 'Get': sense, 'triggerpin': 17, 'echopin': 27, 'uppin': 14, 'downpin': 15, 'up': 0.006590, 'down': 0.004060, 'downshift': 1} # set 'pins' set 'up'/'down' to 'Get' 'cali' at position top/bottom
+d = {'move': move, 'Set': head, 'Get': sense, 'triggerpin': 17, 'echopin': 27, 'uppin': 14, 'downpin': 15, 'up': 0.006590, 'down': 0.004060, 'downshift': 2} # set 'pins' set 'up'/'down' to 'Get' 'cali' at position top/bottom
 
 if sys.argv[4:] != ['1']: GPIO.setwarnings(False)
 if sys.argv[4:] != ['1']: GPIO.setmode(GPIO.BCM) # gpio Modus BOARD or BCM
