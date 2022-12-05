@@ -128,7 +128,7 @@ cd home/pi/.ssh/authorized_keys 	# add openssh public here
 ## [nordvpn linux](https://support.nordvpn.com/Connectivity/Linux/1325531132/Installing-and-using-NordVPN-on-Debian-Ubuntu-Raspberry-Pi-Elementary-OS-and-Linux-Mint.htm)
 ```bash
 sh <(curl -sSf https://downloads.nordcdn.com/apps/linux/install.sh)	# install
-nordvpn login --legacy 	# login
+nordvpn login --token tokenstr	# login with token generate token on nord website
 nordvpn status 		# show status
 nordvpn settings 	# show settings
 nordvpn c 		# to connect
