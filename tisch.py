@@ -1,46 +1,56 @@
-import RPi.GPIO as GPIO
-import time
+import asyncio
+import socket
 import sys
+import pathlib
 import subprocess
-import pathlib # for calling itself
+import math
 
-def sub(cmdstring, waitforcompletion): # string here because shell true because only way of chaning commands
-     p = subprocess.Popen(cmdstring , text=False, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-     if waitforcompletion: return p.communicate()[0].decode() # this will wait for subprocess to finisih
+def sub(cmdstring, silence):  # string here because shell true because only way of chaning commands esp important for tapback()
+    if silence: return subprocess.Popen(cmdstring , shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).communicate()[0].decode()  # default universalnewlines/text False is ok because of decode()
+    if not silence: subprocess.Popen(cmdstring , shell=True, stdout=sys.stdout, stderr=sys.stderr).wait()  # unlike aboveus this prints output to current stdout not quiet and waits for completion
 
-def move(): # in the right direction
-    GPIO.setup(d['uppin'], GPIO.OUT) # init move pins just on set so that set can run while get senses pos
-    GPIO.setup(d['downpin'], GPIO.OUT)
+async def whenclient(reader, writer):  # whan client connects this gets called from serve()
+    d['dsrd'] = (await reader.read(255)).decode('utf8')
 
-    while sense() not in range( int(sys.argv[4]) - 10 , int(sys.argv[4]) ): # some fine tuning is to be done to reach true zero every time here
-        if d['h'] > int(sys.argv[4]): GPIO.output(d['uppin'], False); GPIO.output(d['downpin'], True)
-        if d['h'] < int(sys.argv[4]): GPIO.output(d['uppin'], True); GPIO.output(d['downpin'], False)
+async def serve():  # initiates listening for client connections and calls move
+    await asyncio.start_server(whenclient, 'localhost', 2222); await move()
 
-    GPIO.output(d['downpin'], False) # stop driving
-    GPIO.output(d['uppin'], False)
+async def move():  # moves tisch
+    import os; os.environ["BLINKA_MCP2221"] = "1"; import board, digitalio, adafruit_vl53l1x; d['vl53'] = adafruit_vl53l1x.VL53L1X(board.I2C()); d['vl53'].start_ranging()  # configure sense some how eventough this takes1 sec no client connections are lost in the mean time
+    # pretty print while d.get('desired', sys.argv[2]) != "quit": print(d['lineup'], end=d['lineclear']); print(f" desired: {d.get('desired', sys.argv[2])} measured: {vl53.distance}"); await asyncio.sleep(0.2)  # while sleep serve() has authority to connect to client and call whenclient()
 
-def sense(): # current pos via sensor
-    GPIO.output(d['triggerpin'], True)
-    time.sleep(0.00001) # see spec sheet trigger pin high for 0.01ms to init pulse
-    GPIO.output(d['triggerpin'], False)
-    while GPIO.input(d['echopin']) == 0: d['pulse'] = time.time() # time when pulse is out
-    while GPIO.input(d['echopin']) == 1: d['echo'] = time.time() # time when echo returns
-    d['h'] = int( ( (d['echo']-d['pulse']-d['down']) / (d['up']-d['down']) )*100 - d['downshift'] ) # 'echo' 'pulse' time delta translated into 1 to 100 hight including slight down bias
-    time.sleep(0.2) # pause for when called via while in 'Set' no good but one line shorter
+    d['h'] = int( ( (-d['down']) / (d['up']-d['down']) )*100 - d['downshift'] ) # 'echo' 'pulse' time delta translated into 1 to 100 hight including slight down bias
+    d['h'] = (d['range']*d['dsrd']/100) + d['down']  # translating 'desired' into hight 79 to 140
+    d['h'] = int( (d['h']-d['down'])*100/d['range'] )  # translating 'h' into 1 to 100 vlaue
+
+    digitalio.DigitalInOut(board.G1).switch_to_output(value=False)
+
+
+    while not math.isclose(d.get('position', 1111) ), d['dsrd'] , abs_tol=5):  # TODO calculate tolerance including round()
+        d['position'] = d['translate'](d['range']())
+        if d['position'] < d['dsrd'] and not d.get('pinup'): d.pop('pindown');  d['pinup'] = True; d['sendit'](board.pindown, False); d['sendit'](board.pinup, True)
+        if d['position'] > d['dsrd'] and not d.get('pindown'): d.pop('pinup'); d['pindown'] = True; digitalio.DigitalInOut(board.up).switch_to_output(value=False); digitalio.DigitalInOut(board.down).switch_to_output(value=True)
+        await asyncio.sleep(0.2)
+
+    # TODO check if clauses above
+
+    d['sendit'](board.pindown, False); d['sendit'](board.pinup, False)
+
+
+def status():
     return d['h'] if sys.argv[4:] else print(d['echo']-d['pulse']) if sys.argv[2] == 'cali' else print( max( min(d['h'],1), 0) ) if sys.argv[3] == 'On' else print(max(d['h'],0)) # return for 'Set' else print 1/0 for 'Get' 'On' else print hight for 'Get' 'Rotspeed' else print raw hight for 'Get' 'cali' to calibarate up/down
+    # TODO implement answer to get on off and get hight
 
-def head(): # just when 'Set' and vlaue not 1 so Set On 0 works but Set On 1 does not
-    while int(sub('pgrep -lfc move', True).strip('\n')) > 1 and sys.argv[4:] != ['1']: sub('pkill -of move', True) # kill oldest move as long as more than 1 is running so paralell gets are responsive and all sets exit cleanly and ocasional double moves get reduced to one
-    sub(f'python3 {pathlib.Path(__file__).resolve()} move to height {sys.argv[4]} & disown', False)
 
-d = {'move': move, 'Set': head, 'Get': sense, 'triggerpin': 17, 'echopin': 27, 'uppin': 14, 'downpin': 15, 'up': 0.006590, 'down': 0.004060, 'downshift': 2} # set 'pins' set 'up'/'down' to 'Get' 'cali' at position top/bottom
+async def serveorconnect():
+    try: socket.create_connection(('localhost', 2222)).sendall(bytes(sys.argv[2], "utf-8"))  # try to connect to serve() instance and send pos
+    except: sub(f'screen -L -S tisch -d -m python3 "{pathlib.Path(__file__)}" serve "{sys.argv[2]}"', False)  # no connection possible spawn serve() instance
 
-if sys.argv[4:] != ['1']: GPIO.setwarnings(False)
-if sys.argv[4:] != ['1']: GPIO.setmode(GPIO.BCM) # gpio Modus BOARD or BCM
+d = {'Set': serveorconnect, 'serve': serve, 'pinup': board.G1, 'pindown': board.G0,
+     'sendit': lambda pin, state: digitalio.DigitalInOut(pin).switch_to_output(value=state)
+     'translate': lambda h: (h - 79 )*100/(140-79),  # TODO put round() here somewhere
+     'range': lambda: d['vl53'].distance if d['vl53'].data_ready and d['vl53'].distance else 1111,  # vl53.clear_interrupt() is missing but interrupt is not relevant
+     'lineup': '\033[1A', 'lineclear': '\x1b[2K'}
 
-if sys.argv[4:] != ['1']: GPIO.setup(d['echopin'], GPIO.IN) # 'echopin' input
-if sys.argv[4:] != ['1']: GPIO.setup(d['triggerpin'], GPIO.OUT) # 'triggerpin' output
 
-if sys.argv[4:] != ['1']: d.get(sys.argv[1].strip("''"))() # call 'Get' or 'Set' ignoring set on/rotspeed 1
-
-if sys.argv[4:] != ['1']: GPIO.cleanup() # lots of warnings with conurrent calls because previous script doesnt reach cleanup dont know how to fix perhaps with spawning seperate move instance and here just telling it where to go
+asyncio.run( d.get(sys.argv[1])() )  # call move
