@@ -22,9 +22,9 @@ async def setupvl53():
 async def move():  # this server respondes to 'Set/Get whatever whatever int' and drives tisch to int. int can be 'R+\{1}'
     while not math.isclose( d.get('position', 1111) , d['dsrd'] , abs_tol=5):  # TODO calculate tolerance including round()
         d['rawpos'] = d['range']();    d['transpos'] = d['translate'](d['rawpos'])
-        print(f"rawpos-{d['rawpos']} transpos-{d['transpos']} desired-{d['dsrd']} ")  # pretty print 'lineup': '\033[1A', 'lineclear': '\x1b[2K'  print(d['lineup'], end=d['lineclear']);
-        if d['transpos'] < d['dsrd'] < 101 and not d.get('alrdymovng') == "up": d['alrdymovng'] = "up";    d['drivepin'](eval(d['pindw']), False);    d['drivepin'](eval(d['pinup']), True)
-        if d['transpos'] > d['dsrd'] < 101 and not d.get('alrdymovng') == "dw": d['alrdymovng'] = "dw";    d['drivepin'](eval(d['pinup']), False);    d['drivepin'](eval(d['pindw']), True)
+        print(f"rawpos-{d['rawpos']} transpos-{d['transpos']} desired-{d['dsrd']} onthemove-{d.get('alrdymovng')}")  # pretty print 'lineup': '\033[1A', 'lineclear': '\x1b[2K'  print(d['lineup'], end=d['lineclear']);
+        if d['transpos'] < d['dsrd'] < 101 and not d.get('onthemove') == "up": d['onthemove'] = "up";    d['drivepin'](eval(d['pindw']), False);    d['drivepin'](eval(d['pinup']), True)
+        if d['transpos'] > d['dsrd'] < 101 and not d.get('onthemove') == "dw": d['onthemove'] = "dw";    d['drivepin'](eval(d['pinup']), False);    d['drivepin'](eval(d['pindw']), True)
         await asyncio.sleep(0.5)  # to just read sensor spawn serve instance via 'python3 ....py serve 101' so pins dont get polled high or low
 
 async def trysend():  # 1 will be ignored since for every 'Set tisch Brightness int' homebridge also does 'Set tisch On 1' wich would overwrite brightness int
