@@ -336,7 +336,7 @@ while True:
 
     # TODO !!!! do sth with diff eg when to high brake brake brake brake 
     difflist.append(abs(y - curposlist[-1]))  # reality gap alias diff between curpos reported of pio and simulated pos since yd can escalate but delay is clamped for safety
-
+    # TODO OR dont calc xd just remember last sent xd
     
     T = ttointerval() / 1000; interval = supervisor.ticks_ms()  # T in sec >1 since mess min 1ms plus reset interval
     xd = (endposlist[-1] - endposlist[-2]) / T  # estimate xd this is from t3ssel8r of procedural animation semi implicit euler for y + k1y' + k2y'' = x + k3x' 
